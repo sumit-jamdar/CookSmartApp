@@ -44,6 +44,179 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
     'खिचडी-कढी',
   ];
 
+  final List<Map<String, String>> _popularExtraVeggies = const [
+    {'name': 'कारले (Bitter Gourd)', 'icon': '🌰'},
+    {'name': 'शेवग्याच्या शेंगा (Drumsticks)', 'icon': '🌿'},
+    {'name': 'पडवळ (Snake Gourd)', 'icon': '🥒'},
+    {'name': 'तोंडली (Tindora)', 'icon': '🥒'},
+    {'name': 'दोडका / शिराळे (Ridge Gourd)', 'icon': '🥒'},
+    {'name': 'कोबी (Cabbage)', 'icon': '🥬'},
+    {'name': 'शिमला मिरची (Capsicum)', 'icon': '🫑'},
+    {'name': 'चवळीच्या शेंगा (Cowpeas)', 'icon': '🌱'},
+    {'name': 'अळूची पाने (Colocasia)', 'icon': '🥗'},
+    {'name': 'लाल भोपळा (Pumpkin)', 'icon': '🎃'},
+    {'name': 'रताळे (Sweet Potato)', 'icon': '🥔'},
+    {'name': 'मशरूम (Mushroom)', 'icon': '🍄'},
+    {'name': 'ब्रोकोली (Broccoli)', 'icon': '🥦'},
+  ];
+
+  void _showAddVeggieModal(
+      BuildContext context, RecipeProvider provider, String lang) {
+    _customVeggieController.clear();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        padding: EdgeInsets.fromLTRB(
+            20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 24),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceCard,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.add_circle_outline_rounded,
+                        color: AppTheme.primary, size: 24),
+                    SizedBox(width: 10),
+                    Text(
+                      'नवीन भाजी जोडा (Add Vegetable)',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close_rounded,
+                      color: AppTheme.onSurfaceVariant),
+                  onPressed: () => Navigator.pop(ctx),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'घरात असलेली कोणतीही भाजी टाइप करा किंवा खालील पर्यायांवर टॅप करा:',
+              style: TextStyle(
+                fontSize: 12,
+                color: AppTheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _customVeggieController,
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    decoration: InputDecoration(
+                      hintText: 'उदा. शेवगा, कारले, पडवळ, तोंडली...',
+                      hintStyle: const TextStyle(
+                          color: AppTheme.onSurfaceVariant, fontSize: 13),
+                      filled: true,
+                      fillColor: AppTheme.surfaceHigh,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                    ),
+                    onSubmitted: (val) {
+                      if (val.trim().isNotEmpty) {
+                        provider.addCustomPlannerVeggie(val.trim());
+                        Navigator.pop(ctx);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  onPressed: () {
+                    final text = _customVeggieController.text.trim();
+                    if (text.isNotEmpty) {
+                      provider.addCustomPlannerVeggie(text);
+                      Navigator.pop(ctx);
+                    }
+                  },
+                  child: const Text('जोडा +',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            const Text(
+              'इतर लोकप्रिय भाज्या (Quick Pick):',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.primary,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 180),
+              child: SingleChildScrollView(
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: _popularExtraVeggies.map((veg) {
+                    final isAlreadyAdded =
+                        provider.plannerVeggies.contains(veg['name']);
+                    return ActionChip(
+                      avatar: Text(veg['icon']!,
+                          style: const TextStyle(fontSize: 14)),
+                      label: Text(veg['name']!),
+                      backgroundColor: isAlreadyAdded
+                          ? AppTheme.primary.withValues(alpha: 0.2)
+                          : AppTheme.surfaceHigh,
+                      side: BorderSide(
+                        color: isAlreadyAdded
+                            ? AppTheme.primary
+                            : AppTheme.borderSubtle,
+                      ),
+                      labelStyle: TextStyle(
+                        fontSize: 11,
+                        color:
+                            isAlreadyAdded ? AppTheme.primary : Colors.white70,
+                        fontWeight: isAlreadyAdded
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                      onPressed: () {
+                        provider.addCustomPlannerVeggie(veg['name']!);
+                        Navigator.pop(ctx);
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -263,24 +436,67 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _quickVeggies.map((veg) {
-              final isSelected = provider.plannerVeggies.contains(veg['name']);
-              return FilterChip(
-                label: Text('${veg['icon']} ${veg['name']}'),
-                selected: isSelected,
-                selectedColor: AppTheme.primary,
-                backgroundColor: AppTheme.surfaceCard,
+            children: [
+              ..._quickVeggies.map((veg) {
+                final isSelected =
+                    provider.plannerVeggies.contains(veg['name']);
+                return FilterChip(
+                  label: Text('${veg['icon']} ${veg['name']}'),
+                  selected: isSelected,
+                  selectedColor: AppTheme.primary,
+                  backgroundColor: AppTheme.surfaceCard,
+                  side: BorderSide(
+                    color:
+                        isSelected ? AppTheme.primary : AppTheme.borderSubtle,
+                  ),
+                  labelStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    color:
+                        isSelected ? Colors.white : AppTheme.onSurfaceVariant,
+                  ),
+                  onSelected: (_) => provider.togglePlannerVeggie(veg['name']!),
+                );
+              }),
+              // Custom User-Added Veggies
+              ...provider.plannerVeggies
+                  .where((v) => !_quickVeggies.any((q) => q['name'] == v))
+                  .map((customVeg) {
+                return Chip(
+                  avatar: const Text('🥗', style: TextStyle(fontSize: 13)),
+                  label: Text(customVeg),
+                  backgroundColor: AppTheme.primary.withValues(alpha: 0.25),
+                  side: const BorderSide(color: AppTheme.primary),
+                  labelStyle: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primary,
+                  ),
+                  deleteIcon: const Icon(Icons.close_rounded,
+                      size: 14, color: AppTheme.primary),
+                  onDeleted: () => provider.removePlannerVeggie(customVeg),
+                );
+              }),
+              // "+ आणखी भाजी जोडा" Button
+              ActionChip(
+                avatar: const Icon(Icons.add_rounded,
+                    color: AppTheme.primary, size: 18),
+                label: const Text(
+                  '+ आणखी भाजी जोडा',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primary,
+                  ),
+                ),
+                backgroundColor: AppTheme.primary.withValues(alpha: 0.12),
                 side: BorderSide(
-                  color: isSelected ? AppTheme.primary : AppTheme.borderSubtle,
+                  color: AppTheme.primary.withValues(alpha: 0.6),
+                  width: 1.5,
                 ),
-                labelStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                  color: isSelected ? Colors.white : AppTheme.onSurfaceVariant,
-                ),
-                onSelected: (_) => provider.togglePlannerVeggie(veg['name']!),
-              );
-            }).toList(),
+                onPressed: () => _showAddVeggieModal(context, provider, lang),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
 

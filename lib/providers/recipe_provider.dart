@@ -741,6 +741,19 @@ class RecipeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addCustomPlannerVeggie(String veggie) {
+    final clean = veggie.trim();
+    if (clean.isNotEmpty && !_plannerVeggies.contains(clean)) {
+      _plannerVeggies.add(clean);
+      notifyListeners();
+    }
+  }
+
+  void removePlannerVeggie(String veggie) {
+    _plannerVeggies.remove(veggie);
+    notifyListeners();
+  }
+
   void setPlannerPeopleCount(String count) {
     _plannerPeopleCount = count;
     notifyListeners();
