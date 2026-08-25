@@ -18,10 +18,15 @@ class HomeScreen extends StatelessWidget {
 
     final categories = [
       {'key': 'All', 'label': AppStrings.get('all', lang)},
-      {'key': 'Quick Meals', 'label': AppStrings.get('quickMeals', lang)},
-      {'key': 'High Protein', 'label': AppStrings.get('highProtein', lang)},
-      {'key': 'Vegetarian', 'label': AppStrings.get('vegetarian', lang)},
-      {'key': 'Italian', 'label': AppStrings.get('italian', lang)},
+      {
+        'key': 'महाराष्ट्रीयन खास',
+        'label': AppStrings.get('maharashtrian', lang)
+      },
+      {'key': 'खमंग नाश्ता', 'label': AppStrings.get('breakfast', lang)},
+      {'key': 'पारंपरिक जेवण', 'label': AppStrings.get('traditional', lang)},
+      {'key': 'स्ट्रीट फूड', 'label': AppStrings.get('streetFood', lang)},
+      {'key': 'उपवास स्पेशल', 'label': AppStrings.get('fasting', lang)},
+      {'key': 'गोडधोड', 'label': AppStrings.get('sweets', lang)},
     ];
 
     return Scaffold(
@@ -42,7 +47,8 @@ class HomeScreen extends StatelessWidget {
                           height: 44,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white24, width: 1.5),
+                            border:
+                                Border.all(color: Colors.white24, width: 1.5),
                             image: const DecorationImage(
                               image: NetworkImage(
                                 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
@@ -57,11 +63,16 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Text(
                               AppStrings.get('welcomeBack', lang),
-                              style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  color: AppTheme.onSurfaceVariant),
                             ),
                             Text(
                               AppStrings.get('goodEvening', lang),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -75,15 +86,19 @@ class HomeScreen extends StatelessWidget {
                         // Language Switch Button
                         IconButton(
                           icon: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 6),
                             decoration: BoxDecoration(
                               color: AppTheme.surfaceCard,
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: AppTheme.primary.withValues(alpha: 0.4)),
+                              border: Border.all(
+                                  color:
+                                      AppTheme.primary.withValues(alpha: 0.4)),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.translate_rounded, color: AppTheme.primary, size: 16),
+                                const Icon(Icons.translate_rounded,
+                                    color: AppTheme.primary, size: 16),
                                 const SizedBox(width: 4),
                                 Text(
                                   AppStrings.languageCodes[lang] ?? 'EN',
@@ -113,7 +128,8 @@ class HomeScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                               border: Border.all(color: AppTheme.borderSubtle),
                             ),
-                            child: const Icon(Icons.auto_awesome_rounded, color: AppTheme.primary, size: 18),
+                            child: const Icon(Icons.auto_awesome_rounded,
+                                color: AppTheme.primary, size: 18),
                           ),
                           onPressed: () {
                             if (onNavigateTab != null) {
@@ -133,7 +149,8 @@ class HomeScreen extends StatelessWidget {
             // Search Bar
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Container(
                   height: 48,
                   decoration: BoxDecoration(
@@ -143,13 +160,17 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: TextField(
                     onChanged: provider.setHomeSearchQuery,
-                    style: const TextStyle(color: AppTheme.onSurface, fontSize: 14),
+                    style: const TextStyle(
+                        color: AppTheme.onSurface, fontSize: 14),
                     decoration: InputDecoration(
                       hintText: AppStrings.get('searchHint', lang),
-                      hintStyle: const TextStyle(color: AppTheme.onSurfaceVariant, fontSize: 14),
-                      prefixIcon: const Icon(Icons.search_rounded, color: AppTheme.onSurfaceVariant, size: 20),
+                      hintStyle: const TextStyle(
+                          color: AppTheme.onSurfaceVariant, fontSize: 14),
+                      prefixIcon: const Icon(Icons.search_rounded,
+                          color: AppTheme.onSurfaceVariant, size: 20),
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.tune_rounded, color: AppTheme.primary, size: 20),
+                        icon: const Icon(Icons.tune_rounded,
+                            color: AppTheme.primary, size: 20),
                         onPressed: () {
                           if (onNavigateTab != null) {
                             onNavigateTab!(1);
@@ -189,7 +210,10 @@ class HomeScreen extends StatelessWidget {
                             const SizedBox(width: 8),
                             Text(
                               AppStrings.get('recipeOfTheDay', lang),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(fontSize: 18),
                             ),
                           ],
                         ),
@@ -217,7 +241,8 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(color: AppTheme.borderSubtle),
                           image: DecorationImage(
-                            image: NetworkImage(provider.allRecipes.first.imageUrl),
+                            image: NetworkImage(
+                                provider.allRecipes.first.imageUrl),
                             fit: BoxFit.cover,
                           ),
                           boxShadow: const [
@@ -248,19 +273,25 @@ class HomeScreen extends StatelessWidget {
                               top: 14,
                               right: 14,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: AppTheme.surface.withValues(alpha: 0.85),
+                                  color:
+                                      AppTheme.surface.withValues(alpha: 0.85),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: AppTheme.borderSubtle),
+                                  border:
+                                      Border.all(color: AppTheme.borderSubtle),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.star_rounded, color: AppTheme.tertiary, size: 16),
+                                    const Icon(Icons.star_rounded,
+                                        color: AppTheme.tertiary, size: 16),
                                     const SizedBox(width: 4),
                                     Text(
                                       provider.allRecipes.first.rating,
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12),
                                     ),
                                   ],
                                 ),
@@ -276,26 +307,35 @@ class HomeScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 3),
                                         decoration: BoxDecoration(
                                           color: AppTheme.primary,
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                         child: Text(
                                           provider.allRecipes.first.time,
-                                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                                          style: const TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
                                         ),
                                       ),
                                       const SizedBox(width: 8),
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 3),
                                         decoration: BoxDecoration(
                                           color: Colors.white12,
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                         child: Text(
                                           provider.allRecipes.first.category,
-                                          style: const TextStyle(fontSize: 11, color: Colors.white),
+                                          style: const TextStyle(
+                                              fontSize: 11,
+                                              color: Colors.white),
                                         ),
                                       ),
                                     ],
@@ -330,7 +370,10 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       AppStrings.get('foodCategories', lang),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontSize: 18),
                     ),
                     const SizedBox(height: 12),
                     SizedBox(
@@ -350,16 +393,23 @@ class HomeScreen extends StatelessWidget {
                               label,
                               style: TextStyle(
                                 fontSize: 12,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                color: isSelected ? Colors.white : AppTheme.onSurfaceVariant,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? Colors.white
+                                    : AppTheme.onSurfaceVariant,
                               ),
                             ),
                             selected: isSelected,
-                            onSelected: (_) => provider.setHomeCategoryFilter(key),
+                            onSelected: (_) =>
+                                provider.setHomeCategoryFilter(key),
                             selectedColor: AppTheme.primary,
                             backgroundColor: AppTheme.surfaceCard,
                             side: BorderSide(
-                              color: isSelected ? AppTheme.primary : AppTheme.borderSubtle,
+                              color: isSelected
+                                  ? AppTheme.primary
+                                  : AppTheme.borderSubtle,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -383,11 +433,15 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       AppStrings.get('trendingNow', lang),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontSize: 18),
                     ),
                     Text(
                       '${recipes.length} ${AppStrings.get('recipesCount', lang)}',
-                      style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      style: const TextStyle(
+                          fontSize: 12, color: AppTheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -457,7 +511,10 @@ class HomeScreen extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(width: 6),
-                                        const Text('•', style: TextStyle(color: AppTheme.onSurfaceVariant)),
+                                        const Text('•',
+                                            style: TextStyle(
+                                                color:
+                                                    AppTheme.onSurfaceVariant)),
                                         const SizedBox(width: 6),
                                         Text(
                                           recipe.time,
@@ -482,16 +539,21 @@ class HomeScreen extends StatelessWidget {
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
-                                        const Icon(Icons.star_rounded, color: AppTheme.tertiary, size: 16),
+                                        const Icon(Icons.star_rounded,
+                                            color: AppTheme.tertiary, size: 16),
                                         const SizedBox(width: 4),
                                         Text(
                                           recipe.rating,
-                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12),
                                         ),
                                         const SizedBox(width: 12),
                                         Text(
                                           recipe.calories,
-                                          style: const TextStyle(color: AppTheme.onSurfaceVariant, fontSize: 12),
+                                          style: const TextStyle(
+                                              color: AppTheme.onSurfaceVariant,
+                                              fontSize: 12),
                                         ),
                                       ],
                                     ),
@@ -500,8 +562,12 @@ class HomeScreen extends StatelessWidget {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
-                                  color: isSaved ? AppTheme.primary : AppTheme.onSurfaceVariant,
+                                  isSaved
+                                      ? Icons.bookmark_rounded
+                                      : Icons.bookmark_border_rounded,
+                                  color: isSaved
+                                      ? AppTheme.primary
+                                      : AppTheme.onSurfaceVariant,
                                 ),
                                 onPressed: () {
                                   provider.toggleSave(recipe);
@@ -510,9 +576,15 @@ class HomeScreen extends StatelessWidget {
                                       duration: const Duration(seconds: 1),
                                       backgroundColor: AppTheme.surfaceCard,
                                       content: Text(
-                                        isSaved ? AppStrings.get('removedFromSaved', lang) : AppStrings.get('savedToCookbook', lang),
+                                        isSaved
+                                            ? AppStrings.get(
+                                                'removedFromSaved', lang)
+                                            : AppStrings.get(
+                                                'savedToCookbook', lang),
                                         style: TextStyle(
-                                          color: isSaved ? Colors.white : AppTheme.primary,
+                                          color: isSaved
+                                              ? Colors.white
+                                              : AppTheme.primary,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
