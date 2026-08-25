@@ -221,6 +221,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _yesterdayController.text = 'बटाटा भाजी';
   }
 
   @override
@@ -536,12 +537,74 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
           ),
           const SizedBox(height: 20),
 
-          // 4. What was cooked yesterday? (Anti-repeat trigger)
-          Text(
-            AppStrings.get('cookedYesterday', lang),
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          // 4. "काल काय खाल्लं होतं?" (Custom Answer Input + Quick Chips)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'काल काय खाल्लं होतं? (What did you eat yesterday?)',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              if (_yesterdayController.text.isNotEmpty)
+                GestureDetector(
+                  onTap: () {
+                    _yesterdayController.clear();
+                    provider.setPlannerYesterdayDish('');
+                  },
+                  child: const Text(
+                    'Clear',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceCard,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _yesterdayController.text.isNotEmpty
+                    ? AppTheme.primary.withValues(alpha: 0.6)
+                    : AppTheme.borderSubtle,
+              ),
+            ),
+            child: TextField(
+              controller: _yesterdayController,
+              onChanged: (val) => provider.setPlannerYesterdayDish(val),
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+              decoration: InputDecoration(
+                hintText: 'उदा. काल बटाटा भाजी, पनीर किंवा बाहेरचं जेवण...',
+                hintStyle: const TextStyle(
+                    color: AppTheme.onSurfaceVariant, fontSize: 12),
+                prefixIcon: const Icon(Icons.history_edu_rounded,
+                    color: AppTheme.primary, size: 20),
+                suffixIcon: _yesterdayController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.close_rounded,
+                            color: AppTheme.onSurfaceVariant, size: 16),
+                        onPressed: () {
+                          _yesterdayController.clear();
+                          provider.setPlannerYesterdayDish('');
+                        },
+                      )
+                    : null,
+                border: InputBorder.none,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'किंवा खालील पर्यायांवर १-टॅप करा (Quick Pick):',
+            style: TextStyle(fontSize: 11, color: AppTheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 6),
           Wrap(
             spacing: 6,
             runSpacing: 6,
@@ -562,7 +625,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   color: isSelected ? Colors.white : AppTheme.onSurfaceVariant,
                 ),
-                onSelected: (_) => provider.setPlannerYesterdayDish(opt),
+                onSelected: (_) {
+                  _yesterdayController.text = opt;
+                  provider.setPlannerYesterdayDish(opt);
+                },
                 showCheckmark: false,
               );
             }).toList(),
