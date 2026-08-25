@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../models/recipe.dart';
 import '../providers/recipe_provider.dart';
 import '../theme/app_theme.dart';
 import '../localization/app_strings.dart';
@@ -213,6 +215,170 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _shareMenu(
+      BuildContext context, MealSuggestion suggestion, String lang) {
+    final text = '''
+🍛 *CookSmart आजचा स्मार्ट मेनू*:
+✨ ${suggestion.title}
+🥗 सोबत: ${suggestion.thaliPairing}
+⏱️ वेळ: ${suggestion.cookingTime} | 🔥 ${suggestion.calories}
+💡 AI सल्ला: ${suggestion.aiReason}
+
+👩‍🍳 CookSmart App वरून पाठवले!
+''';
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppTheme.surfaceCard,
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded,
+                color: Colors.greenAccent, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                AppStrings.get('shareCopied', lang),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showGroceryListModal(BuildContext context, Recipe recipe, String lang) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setModalState) {
+          final listText = recipe.ingredients
+              .map((i) => '• ${i.name} (${i.amount})')
+              .join('\n');
+
+          return Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceCard,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(28)),
+              border:
+                  Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.shopping_cart_rounded,
+                            color: AppTheme.primary, size: 24),
+                        const SizedBox(width: 10),
+                        Text(
+                          '${recipe.title} - किराणा यादी',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded,
+                          color: AppTheme.onSurfaceVariant),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 260),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: recipe.ingredients.length,
+                    itemBuilder: (c, i) {
+                      final item = recipe.ingredients[i];
+                      return CheckboxListTile(
+                        value: item.isChecked,
+                        activeColor: AppTheme.primary,
+                        title: Text(
+                          item.name,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: item.isChecked
+                                ? AppTheme.onSurfaceVariant
+                                : Colors.white,
+                            decoration: item.isChecked
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
+                        ),
+                        subtitle: Text(
+                          item.amount,
+                          style: const TextStyle(
+                              fontSize: 11, color: AppTheme.onSurfaceVariant),
+                        ),
+                        onChanged: (val) {
+                          setModalState(() {
+                            item.isChecked = val ?? false;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    icon: const Icon(Icons.copy_rounded, size: 18),
+                    label: Text(
+                      AppStrings.get('groceryCopied', lang),
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(
+                          text:
+                              '🛒 किराणा सामान यादी (${recipe.title}):\n$listText'));
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: AppTheme.surfaceCard,
+                          content: Text(
+                            AppStrings.get('groceryCopied', lang),
+                            style: const TextStyle(
+                                color: AppTheme.primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -909,7 +1075,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
                 ),
                 const SizedBox(height: 18),
 
-                // Action Buttons
+                const SizedBox(height: 18),
+
+                // Primary Action Buttons
                 Row(
                   children: [
                     Expanded(
@@ -954,6 +1122,60 @@ class _MealPlannerScreenState extends State<MealPlannerScreen>
                               fontSize: 11, color: AppTheme.onSurfaceVariant),
                         ),
                         onPressed: () => provider.generateSmartMealSuggestion(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // Secondary Utilities (Share on WhatsApp + Smart Grocery List)
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                              color: Colors.greenAccent.withValues(alpha: 0.4)),
+                          backgroundColor:
+                              Colors.greenAccent.withValues(alpha: 0.08),
+                          foregroundColor: Colors.greenAccent,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(Icons.share_rounded, size: 16),
+                        label: Text(
+                          AppStrings.get('shareMenu', lang),
+                          style: const TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () => _shareMenu(context, suggestion, lang),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                              color: AppTheme.primary.withValues(alpha: 0.4)),
+                          backgroundColor:
+                              AppTheme.primary.withValues(alpha: 0.08),
+                          foregroundColor: AppTheme.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon:
+                            const Icon(Icons.shopping_cart_outlined, size: 16),
+                        label: Text(
+                          AppStrings.get('groceryList', lang),
+                          style: const TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () => _showGroceryListModal(
+                            context, suggestion.recipe, lang),
                       ),
                     ),
                   ],

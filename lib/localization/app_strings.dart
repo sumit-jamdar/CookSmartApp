@@ -63,6 +63,10 @@ class AppStrings {
       'weeklyPlannerTitle': '७ दिवसांचे स्मार्ट जेवण नियोजन 📅',
       'weeklyPlannerSubtitle':
           'घरच्या गृहिणींसाठी दररोजचे संतुलित व पोषणयुक्त जेवण वेळापत्रक',
+      'shareMenu': 'मेनू WhatsApp वर पाठवा 📲',
+      'shareCopied': 'मेनू कॉपी झाला! WhatsApp किंवा मेसेजवर पाठवा.',
+      'groceryList': 'स्मार्ट किराणा यादी 🛒',
+      'groceryCopied': 'किराणा यादी कॉपी झाली! खरेदीसाठी तयार.',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'किचन रेसिपी AI जनरेटर',
@@ -175,6 +179,10 @@ class AppStrings {
       'weeklyPlannerTitle': '७ दिनों का स्मार्ट मील प्लान 📅',
       'weeklyPlannerSubtitle':
           'गृहणियों के लिए रोज़ का संतुलित और स्वादिष्ट आहार चार्ट',
+      'shareMenu': 'मेन्यू WhatsApp पर भेजें 📲',
+      'shareCopied': 'मेन्यू कॉपी हो गया! WhatsApp पर भेजें.',
+      'groceryList': 'स्मार्ट किराना लिस्ट 🛒',
+      'groceryCopied': 'किराना लिस्ट कॉपी हो गई!',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'रसोई रेसिपी AI जनरेटर',
@@ -287,6 +295,10 @@ class AppStrings {
       'weeklyPlannerTitle': '7-Day Smart Meal Planner 📅',
       'weeklyPlannerSubtitle':
           'Effortless weekly balanced meal schedule designed for homemakers',
+      'shareMenu': 'Share Menu on WhatsApp 📲',
+      'shareCopied': 'Menu copied to clipboard! Ready to send on WhatsApp.',
+      'groceryList': 'Smart Grocery List 🛒',
+      'groceryCopied': 'Grocery list copied to clipboard!',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'Smart Kitchen AI Generator',
@@ -399,6 +411,10 @@ class AppStrings {
       'weeklyPlannerTitle': 'Planificador Inteligente de 7 Días 📅',
       'weeklyPlannerSubtitle':
           'Calendario equilibrado de comidas diseñado para el hogar',
+      'shareMenu': 'Compartir Menú en WhatsApp 📲',
+      'shareCopied': '¡Menú copiado! Listo para enviar por WhatsApp.',
+      'groceryList': 'Lista de Compras 🛒',
+      'groceryCopied': '¡Lista de compras copiada!',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'Generador Inteligente AI',
