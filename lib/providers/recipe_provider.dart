@@ -630,6 +630,388 @@ class RecipeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // --- Smart Meal Suggestion & Daily Planner State ---
+  String _plannerMealTime = 'Lunch';
+  final List<String> _plannerVeggies = [
+    'मेथी (Methi)',
+    'बटाटा (Potato)',
+    'टोमॅटो (Tomato)',
+    'कांदा (Onion)',
+  ];
+  String _plannerPeopleCount = '३-४ लोक';
+  String _plannerCookingTime = '२० मिनिटे';
+  String _plannerYesterdayDish = 'बटाटा भाजी';
+  MealSuggestion? _currentSuggestion;
+  bool _isSuggestingMeal = false;
+
+  // Getters for Meal Planner
+  String get plannerMealTime => _plannerMealTime;
+  List<String> get plannerVeggies => _plannerVeggies;
+  String get plannerPeopleCount => _plannerPeopleCount;
+  String get plannerCookingTime => _plannerCookingTime;
+  String get plannerYesterdayDish => _plannerYesterdayDish;
+  MealSuggestion? get currentSuggestion => _currentSuggestion;
+  bool get isSuggestingMeal => _isSuggestingMeal;
+
+  // 7-Day Weekly Balanced Meal Plan for Homemakers
+  final List<Map<String, dynamic>> weeklyMealPlan = const [
+    {
+      'day_mr': 'सोमवार (Monday)',
+      'day_en': 'Monday',
+      'lunch': 'झणझणीत पिठलं आणि गरम ज्वारीची भाकरी',
+      'lunch_side': 'लसूण-मिरची ठेचा + कांदा + ताक',
+      'dinner': 'खमंग लसूण-पालक डाळ आणि जिरा राईस',
+      'dinner_side': 'फुलके + काकडी कोशिंबीर',
+      'time': '२० मिनिटे',
+      'icon': '🌱',
+    },
+    {
+      'day_mr': 'मंगळवार (Tuesday)',
+      'day_en': 'Tuesday',
+      'lunch': 'मोड आलेल्या मटकीची उसळ आणि चपाती',
+      'lunch_side': 'वरण-भात + लिंबाचे लोणचे',
+      'dinner': 'चमचमीत शेव भाजी आणि गरम भाकरी',
+      'dinner_side': 'दही + पापड + सॅलड',
+      'time': '२५ मिनिटे',
+      'icon': '🍲',
+    },
+    {
+      'day_mr': 'बुधवार (Wednesday)',
+      'day_en': 'Wednesday',
+      'lunch': 'मसालेदार भरली भेंडी आणि पोळी',
+      'lunch_side': 'टोमॅटो सार + भात + कोशिंबीर',
+      'dinner': 'खमंग पनीर भुर्जी आणि तवा पराठा',
+      'dinner_side': 'टोमॅटो सूप + हिरवी चटणी',
+      'time': '२० मिनिटे',
+      'icon': '🍛',
+    },
+    {
+      'day_mr': 'गुरुवार (Thursday)',
+      'day_en': 'Thursday',
+      'lunch': 'फ्लॉवर-मटार रस्सा भाजी आणि चपाती',
+      'lunch_side': 'मुगाची डाळ + भात + लिंबू',
+      'dinner': 'पौष्टिक मुग डाळ खिचडी आणि कढी',
+      'dinner_side': 'साजूक तूप + तळलेला पापड',
+      'time': '२० मिनिटे',
+      'icon': '🍚',
+    },
+    {
+      'day_mr': 'शुक्रवार (Friday)',
+      'day_en': 'Friday',
+      'lunch': 'मसालेदार भरली वांगी आणि ज्वारीची भाकरी',
+      'lunch_side': 'सोलकढी + शेंगदाणा चटणी',
+      'dinner': 'सुवासिक व्हेजिटेबल तवा पुलाव',
+      'dinner_side': 'बूंदी रायता + भाजलेला पापड',
+      'time': '३० मिनिटे',
+      'icon': '🍆',
+    },
+    {
+      'day_mr': 'शनिवार (Saturday)',
+      'day_en': 'Saturday',
+      'lunch': 'खमंग मेथीची सुकी भाजी आणि गरम भाकरी',
+      'lunch_side': 'कांदा भजी + डाळ तडका + भात',
+      'dinner': 'साजूक तुपातील सुवासिक मसाले भात',
+      'dinner_side': 'खमंग मठ्ठा + कांदा-टोमॅटो कोशिंबीर',
+      'time': '२५ मिनिटे',
+      'icon': '🥬',
+    },
+    {
+      'day_mr': 'रविवार (Sunday - स्पेशल मेजवानी)',
+      'day_en': 'Sunday (Special Feast)',
+      'lunch': 'अस्सल कोल्हापुरी मिसळ पाव / स्पेशल थाळी',
+      'lunch_side': 'रस्सा + फरसाण + लादी पाव + गुलाबजाम',
+      'dinner': 'मुंबई स्पेशल बटर पावभाजी / पनीर टिक्का मसाला',
+      'dinner_side': 'बटर पाव + बारीक कांदा-लिंबू',
+      'time': '३५ मिनिटे',
+      'icon': '🎉',
+    },
+  ];
+
+  void setPlannerMealTime(String time) {
+    _plannerMealTime = time;
+    notifyListeners();
+  }
+
+  void togglePlannerVeggie(String veggie) {
+    if (_plannerVeggies.contains(veggie)) {
+      _plannerVeggies.remove(veggie);
+    } else {
+      _plannerVeggies.add(veggie);
+    }
+    notifyListeners();
+  }
+
+  void setPlannerPeopleCount(String count) {
+    _plannerPeopleCount = count;
+    notifyListeners();
+  }
+
+  void setPlannerCookingTime(String time) {
+    _plannerCookingTime = time;
+    notifyListeners();
+  }
+
+  void setPlannerYesterdayDish(String dish) {
+    _plannerYesterdayDish = dish;
+    notifyListeners();
+  }
+
+  Future<MealSuggestion> generateSmartMealSuggestion() async {
+    _isSuggestingMeal = true;
+    notifyListeners();
+
+    await Future.delayed(const Duration(milliseconds: 600));
+
+    final yesterday = _plannerYesterdayDish.toLowerCase();
+    final veggies = _plannerVeggies.join(' ').toLowerCase();
+
+    // Smart culinary recommendation rules preventing yesterday's repeats:
+    late MealSuggestion suggestion;
+
+    if ((veggies.contains('मेथी') || veggies.contains('methi')) &&
+        !yesterday.contains('मेथी')) {
+      suggestion = MealSuggestion(
+        title: _currentLanguage == 'mr'
+            ? 'खमंग लसूण-मेथीची भाजी (Garlic Spiced Methi)'
+            : 'Garlic Spiced Methi Sabzi & Jowar Bhakri',
+        heroVeggie: 'ताजी मेथी (Fresh Methi)',
+        mealType: _plannerMealTime,
+        thaliPairing: _currentLanguage == 'mr'
+            ? 'गरम ज्वारीची भाकरी + वरण-भात + काकडी कोशिंबीर + लिंबाचे लोणचे'
+            : 'Hot Jowar Bhakri + Varan-Bhaat + Cucumber Koshimbir + Pickle',
+        aiReason: _currentLanguage == 'mr'
+            ? 'काल $plannerYesterdayDish झाला होता, त्यामुळे आज शरीराला आवश्यक लोह (Iron), फायबर आणि ताजेपणा देणारी मेथीची भाजी आणि भाकरी हे पचायला हलके व पौष्टिक कॉम्बिनेशन आहे!'
+            : 'Since you had $plannerYesterdayDish yesterday, light & iron-rich Methi Sabzi with hot Bhakri provides the perfect balanced nutrition without repeat fatigue!',
+        cookingTime: '१८ मिनिटे',
+        calories: '२६० कॅलरी',
+        difficulty: 'Easy',
+        recipe: Recipe(
+          id: 'sug_methi_bhaji',
+          title: _currentLanguage == 'mr'
+              ? 'खमंग लसूण-मेथीची सुकी भाजी'
+              : 'Khamang Garlic Methi Sabzi',
+          category: 'पारंपरिक जेवण',
+          imageUrl:
+              'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80',
+          time: '१८ मिनिटे',
+          calories: '२६० कॅलरी',
+          servings: _plannerPeopleCount,
+          rating: '4.9',
+          reviews: 'AI Meal Suggestion',
+          difficulty: 'Easy',
+          description:
+              'बारीक चिरलेला भरपूर लसूण, हिरवी मिरची आणि शेंगदाण्याच्या कुटात परतून वाफवलेली मेथीची भाजी.',
+          ingredients: [
+            IngredientItem(
+                name: 'ताजी मेथी जुडी', amount: '२ जुड्या (निवडून धुतलेली)'),
+            IngredientItem(
+                name: 'लसूण पाकळ्या (ठेचून)', amount: '१०-१२ पाकळ्या'),
+            IngredientItem(
+                name: 'हिरवी मिरची', amount: '३ मिरच्या (बारीक चिरून)'),
+            IngredientItem(
+                name: 'भाजलेल्या शेंगदाण्याचा कूट', amount: '२ मोठे चमचे'),
+            IngredientItem(name: 'मोहरी, हिंग व तेल', amount: '२ चमचे तेल'),
+            IngredientItem(name: 'चवीनुसार मीठ', amount: '१/२ चमचा'),
+          ],
+          steps: [
+            CookingStep(
+                number: 1,
+                title: 'मेथी पूर्वतयारी',
+                instruction:
+                    'मेथीची पाने निवडून २ वेळा स्वच्छ धुवा व पाणी पूर्ण निथळून बारीक चिरा.',
+                timerSeconds: 180),
+            CookingStep(
+                number: 2,
+                title: 'लसूण-मिरची खमंग फोडणी',
+                instruction:
+                    'कढईत २ मोठे चमचे तेल गरम करून मोहरी, हिंग आणि भरपूर ठेचलेला लसूण तांबूस होईपर्यंत परता. हिरवी मिरची घाला.',
+                timerSeconds: 120),
+            CookingStep(
+                number: 3,
+                title: 'मेथी परतणे व वाफ काढणे',
+                instruction:
+                    'चिरलेली मेथी घालून मध्यम आचेवर २ मिनिटे परता. मीठ व शेंगदाणा कूट घालून झाकण न ठेवता किंवा हलके झाकून ५ मिनिटे शिजवा जेणेकरून रंग हिरवागार राहील.',
+                timerSeconds: 300),
+            CookingStep(
+                number: 4,
+                title: 'भाकरीसोबत वाढणे',
+                instruction:
+                    'गरमागरम ज्वारीची भाकरी किंवा चपातीसोबत सर्व्ह करा.',
+                timerSeconds: 60),
+          ],
+        ),
+      );
+    } else if ((veggies.contains('भेंडी') || veggies.contains('bhendi')) &&
+        !yesterday.contains('भेंडी')) {
+      suggestion = MealSuggestion(
+        title: _currentLanguage == 'mr'
+            ? 'कुरकुरीत भरली भेंडी (Stuffed Bharli Bhendi)'
+            : 'Crispy Stuffed Bharli Bhendi & Phulke',
+        heroVeggie: 'कोवळी भेंडी (Fresh Okra)',
+        mealType: _plannerMealTime,
+        thaliPairing: _currentLanguage == 'mr'
+            ? 'गरम मऊ चपाती + जिरा दाल तडका + साजूक तूप भात'
+            : 'Soft Phulkas + Jeera Dal Tadka + Steamed Rice + Ghee',
+        aiReason: _currentLanguage == 'mr'
+            ? 'कालच्या मेनूपेक्षा पूर्णपणे वेगळी, कुरकुरीत आणि भाजलेल्या दाण्याच्या कुटातील भरली भेंडी सर्वांना खूप आवडेल!'
+            : 'A delightfully crisp, non-slimy stuffed okra that pairs brilliantly with soft chapatis and dal!',
+        cookingTime: '२० मिनिटे',
+        calories: '२८० कॅलरी',
+        difficulty: 'Easy',
+        recipe: Recipe(
+          id: 'sug_bhendi_bhaji',
+          title: _currentLanguage == 'mr'
+              ? 'मसालेदार भरली भेंडी'
+              : 'Spiced Bharli Bhendi',
+          category: 'महाराष्ट्रीयन खास',
+          imageUrl:
+              'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=900&q=80',
+          time: '२० मिनिटे',
+          calories: '२८० कॅलरी',
+          servings: _plannerPeopleCount,
+          rating: '4.9',
+          reviews: 'AI Meal Suggestion',
+          difficulty: 'Easy',
+          description:
+              'शेंगदाणा कूट, गोडा मसाला, धने पूड आणि आमचूर भरून कुरकुरीत परतलेली भेंडी.',
+          ingredients: [
+            IngredientItem(
+                name: 'ताजी कोवळी भेंडी', amount: '२५० ग्रॅम (मधोमध कापलेली)'),
+            IngredientItem(name: 'भाजलेला शेंगदाणा कूट', amount: '३ मोठे चमचे'),
+            IngredientItem(
+                name: 'गोडा मसाला, हळद, तिखट', amount: 'प्रत्येकी १ चमचा'),
+            IngredientItem(name: 'धने पूड व आमचूर पावडर', amount: '१-१ चमचा'),
+            IngredientItem(name: 'तेल व चवीनुसार मीठ', amount: '२.५ चमचे तेल'),
+          ],
+          steps: [
+            CookingStep(
+                number: 1,
+                title: 'भेंडी कापणे',
+                instruction:
+                    'भेंडी धुवून कोरडी पुसून घ्या. देठ काढून एका बाजूने उभी चीर द्या.',
+                timerSeconds: 180),
+            CookingStep(
+                number: 2,
+                title: 'मसाला भरणे',
+                instruction:
+                    'शेंगदाणा कूट, गोडा मसाला, हळद, तिखट, मीठ व १ चमचा तेल एकत्र करून भेंडीत भरा.',
+                timerSeconds: 200),
+            CookingStep(
+                number: 3,
+                title: 'कढईत कुरकुरीत भाजणे',
+                instruction:
+                    'कढईत तेल गरम करून भरलेली भेंडी घाला. मध्यम आचेवर झाकण न ठेवता सर्व बाजूंनी कुरकुरीत होईपर्यंत ८ मिनिटे परता.',
+                timerSeconds: 480),
+            CookingStep(
+                number: 4,
+                title: 'सर्व्ह करणे',
+                instruction: 'गरमागरम चपाती आणि आमटी-भातासोबत वाढा.',
+                timerSeconds: 60),
+          ],
+        ),
+      );
+    } else if ((veggies.contains('पालक') ||
+            veggies.contains('palak') ||
+            veggies.contains('पनीर')) &&
+        !yesterday.contains('पनीर')) {
+      suggestion = MealSuggestion(
+        title: _currentLanguage == 'mr'
+            ? 'ढाबा स्टाईल लसूणी पालक-पनीर (Lasooni Palak Paneer)'
+            : 'Lasooni Palak Paneer & Butter Paratha',
+        heroVeggie: 'ताजी पालक व पनीर (Spinach & Paneer)',
+        mealType: _plannerMealTime,
+        thaliPairing: _currentLanguage == 'mr'
+            ? 'तवा पराठा / फुलके + जिरा राईस + कांदा-टोमॅटो सॅलड'
+            : 'Tawa Paratha + Jeera Rice + Onion Tomato Salad',
+        aiReason: _currentLanguage == 'mr'
+            ? 'भरपूर प्रोटीन आणि कॅल्शियमयुक्त, रेस्टॉरंट स्टाईल चवदार आणि घरच्यांसाठी पौष्टिक डिनर पर्याय!'
+            : 'High protein and calcium-rich dinner option that feels indulgent yet is wholesome and light.',
+        cookingTime: '२२ मिनिटे',
+        calories: '३४० कॅलरी',
+        difficulty: 'Medium',
+        recipe: Recipe(
+          id: 'sug_palak_paneer',
+          title: _currentLanguage == 'mr'
+              ? 'लसूणी पालक पनीर'
+              : 'Lasooni Palak Paneer',
+          category: 'शाही भोजन',
+          imageUrl:
+              'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=900&q=80',
+          time: '२२ मिनिटे',
+          calories: '३४० कॅलरी',
+          servings: _plannerPeopleCount,
+          rating: '4.9',
+          reviews: 'AI Meal Suggestion',
+          difficulty: 'Medium',
+          description:
+              'हिरवीगार पालक प्युरी, मऊ पनीर आणि वरून दिलेल्या खमंग लसणाच्या तडक्याची शाही मेजवानी.',
+          ingredients: [
+            IngredientItem(
+                name: 'ताजी पालक जुडी',
+                amount: '१ मोठी (ब्लांच करून प्युरी केलेली)'),
+            IngredientItem(name: 'ताजे पनीर चौकोनी तुकडे', amount: '२०० ग्रॅम'),
+            IngredientItem(
+                name: 'लसूण पाकळ्या बारीक चिरून', amount: '२ मोठे चमचे'),
+            IngredientItem(
+                name: 'कांदा व टोमॅटो बारीक चिरून', amount: '१-१ मध्यम'),
+            IngredientItem(name: 'बटर व साजूक तूप', amount: '२ मोठे चमचे'),
+            IngredientItem(name: 'गरम मसाला, हळद व मीठ', amount: 'चवीनुसार'),
+          ],
+          steps: [
+            CookingStep(
+                number: 1,
+                title: 'पालक ब्लांच करणे',
+                instruction:
+                    'उकळत्या पाण्यात पालक २ मिनिटे टाकून लगेच बर्फाच्या पाण्यात टाका आणि मिक्सरमध्ये गुळगुळीत वाटा.',
+                timerSeconds: 240),
+            CookingStep(
+                number: 2,
+                title: 'ग्रेव्ही तयार करणे',
+                instruction:
+                    'कढईत बटर गरम करून जिरे, कांदा, आले-लसूण पेस्ट आणि टोमॅटो तेल सुटेपर्यंत परता.',
+                timerSeconds: 240),
+            CookingStep(
+                number: 3,
+                title: 'पालक व पनीर शिजवणे',
+                instruction:
+                    'तयार पालक प्युरी, मीठ व गरम मसाला घाला. उकळी आल्यावर पनीरचे तुकडे घालून ३ मिनिटे मंद आचेवर शिजवा.',
+                timerSeconds: 180),
+            CookingStep(
+                number: 4,
+                title: 'लसूणी तडका व सर्व्हिंग',
+                instruction:
+                    'छोट्या कढईत तूप गरम करून बारीक लसूण व सुकी लाल मिरची लालसर परतून भाजीत वरून फोडणी द्या!',
+                timerSeconds: 90),
+          ],
+        ),
+      );
+    } else {
+      suggestion = MealSuggestion(
+        title: _currentLanguage == 'mr'
+            ? 'झणझणीत गावरान पिठलं आणि ज्वारीची भाकरी'
+            : 'Garlic Tempered Pithla & Jowar Bhakri',
+        heroVeggie: 'डाळीचे पीठ व लसूण (Gram Flour & Garlic)',
+        mealType: _plannerMealTime,
+        thaliPairing: _currentLanguage == 'mr'
+            ? 'गरमागरम ज्वारीची भाकरी + हिरवा ठेचा + कांदा + साजूक तूप'
+            : 'Hot Jowar Bhakri + Green Chilli Thecha + Raw Onion + Ghee',
+        aiReason: _currentLanguage == 'mr'
+            ? 'कमीत कमी वेळात (१५ मिनिटांत) बनणारी, पोटाला तृप्ती देणारी आणि सर्वांची आवडती पारंपरिक अस्सल महाराष्ट्रीयन थाळी!'
+            : 'Quickest (15 mins), most comforting authentic Maharashtrian meal that satisfies everyone instantly!',
+        cookingTime: '१५ मिनिटे',
+        calories: '३१० कॅलरी',
+        difficulty: 'Easy',
+        recipe: _allRecipes[2],
+      );
+    }
+
+    _currentSuggestion = suggestion;
+    _currentRecipe = suggestion.recipe;
+    _isSuggestingMeal = false;
+    notifyListeners();
+    return suggestion;
+  }
+
   Future<Recipe> generateRecipeFromPantry() async {
     _isAiGenerating = true;
     notifyListeners();
@@ -656,4 +1038,28 @@ class RecipeProvider with ChangeNotifier {
       rethrow;
     }
   }
+}
+
+class MealSuggestion {
+  final String title;
+  final String heroVeggie;
+  final String mealType;
+  final String thaliPairing;
+  final String aiReason;
+  final String cookingTime;
+  final String calories;
+  final String difficulty;
+  final Recipe recipe;
+
+  MealSuggestion({
+    required this.title,
+    required this.heroVeggie,
+    required this.mealType,
+    required this.thaliPairing,
+    required this.aiReason,
+    required this.cookingTime,
+    required this.calories,
+    required this.difficulty,
+    required this.recipe,
+  });
 }

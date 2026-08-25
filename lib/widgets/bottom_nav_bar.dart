@@ -21,7 +21,7 @@ class CookSmartBottomNav extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.surface.withValues(alpha: 0.92),
+        color: AppTheme.surface.withValues(alpha: 0.95),
         border: const Border(
           top: BorderSide(color: AppTheme.borderSubtle, width: 1),
         ),
@@ -32,7 +32,7 @@ class CookSmartBottomNav extends StatelessWidget {
           child: SafeArea(
             child: Container(
               height: 64,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -43,17 +43,26 @@ class CookSmartBottomNav extends StatelessWidget {
                     label: AppStrings.get('home', lang),
                     isActive: currentIndex == 0,
                   ),
-                  _buildGeneratorItem(
+                  _buildNavItem(
                     context: context,
-                    label: AppStrings.get('generator', lang),
+                    index: 1,
+                    icon: Icons.lightbulb_rounded,
+                    label: AppStrings.get('mealPlanner', lang),
                     isActive: currentIndex == 1,
                   ),
                   _buildNavItem(
                     context: context,
                     index: 2,
+                    icon: Icons.auto_awesome_rounded,
+                    label: AppStrings.get('generator', lang),
+                    isActive: currentIndex == 2,
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    index: 3,
                     icon: Icons.bookmark_rounded,
                     label: AppStrings.get('saved', lang),
-                    isActive: currentIndex == 2,
+                    isActive: currentIndex == 3,
                   ),
                 ],
               ),
@@ -75,73 +84,22 @@ class CookSmartBottomNav extends StatelessWidget {
       onTap: () => onTap(index),
       borderRadius: BorderRadius.circular(16),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              size: 24,
+              size: 22,
               color: isActive ? AppTheme.primary : AppTheme.onSurfaceVariant,
             ),
             const SizedBox(height: 3),
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 11,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? AppTheme.primary : AppTheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGeneratorItem({
-    required BuildContext context,
-    required String label,
-    required bool isActive,
-  }) {
-    return InkWell(
-      onTap: () => onTap(1),
-      borderRadius: BorderRadius.circular(20),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              margin: const EdgeInsets.only(bottom: 2),
-              decoration: BoxDecoration(
-                color: AppTheme.surfaceCard,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isActive ? AppTheme.primary : AppTheme.borderSubtle,
-                  width: 1.5,
-                ),
-                boxShadow: isActive
-                    ? [
-                        BoxShadow(
-                          color: AppTheme.primary.withValues(alpha: 0.35),
-                          blurRadius: 12,
-                        ),
-                      ]
-                    : null,
-              ),
-              child: const Icon(
-                Icons.soup_kitchen_rounded,
-                size: 20,
-                color: AppTheme.primary,
-              ),
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
+                fontSize: 10.5,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                 color: isActive ? AppTheme.primary : AppTheme.onSurfaceVariant,
               ),

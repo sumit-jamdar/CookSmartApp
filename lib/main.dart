@@ -4,6 +4,7 @@ import 'providers/recipe_provider.dart';
 import 'theme/app_theme.dart';
 import 'widgets/bottom_nav_bar.dart';
 import 'screens/home_screen.dart';
+import 'screens/meal_planner_screen.dart';
 import 'screens/ingredient_input_screen.dart';
 import 'screens/recipe_result_screen.dart';
 import 'screens/saved_recipes_screen.dart';
@@ -31,6 +32,7 @@ class CookSmartApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MainNavigationShell(),
+        '/meal-planner': (context) => const MealPlannerScreen(),
         '/ingredient-input': (context) => const IngredientInputScreen(),
         '/recipe-result': (context) => const RecipeResultScreen(),
         '/saved-recipes': (context) => const SavedRecipesScreen(),
@@ -59,6 +61,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       HomeScreen(onNavigateTab: _onTabTapped),
+      MealPlannerScreen(onNavigateTab: _onTabTapped),
       IngredientInputScreen(onNavigateTab: _onTabTapped),
       SavedRecipesScreen(onNavigateTab: _onTabTapped),
     ];

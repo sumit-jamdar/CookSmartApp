@@ -187,6 +187,83 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
+            // "आज काय बनवायचं?" Daily Smart Assistant Quick Banner
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 6, 20, 10),
+                child: InkWell(
+                  onTap: () {
+                    if (onNavigateTab != null) {
+                      onNavigateTab!(1);
+                    } else {
+                      Navigator.pushNamed(context, '/meal-planner');
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppTheme.primary.withValues(alpha: 0.2),
+                          Colors.deepOrangeAccent.withValues(alpha: 0.1),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppTheme.primary.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primary,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.primary.withValues(alpha: 0.4),
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                          child: const Icon(Icons.lightbulb_rounded,
+                              color: Colors.white, size: 22),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppStrings.get('mealSuggestionTitle', lang),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                'डिश रिपीट न करता आजचा परिपूर्ण मेनू ठरवा!',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: AppTheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded,
+                            color: AppTheme.primary, size: 14),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             // Featured Recipe of the Day Hero
             SliverToBoxAdapter(
               child: Padding(

@@ -34,8 +34,35 @@ class AppStrings {
 
       // Bottom Nav
       'home': 'होम',
+      'mealPlanner': 'काय बनवायचं?',
       'generator': 'रेसिपी AI',
       'saved': 'माझ्या रेसिपी',
+
+      // Meal Suggestion & Planner
+      'mealSuggestionTitle': 'आज जेवणात काय बनवायचं?',
+      'mealSuggestionSubtitle':
+          'घरातील भाज्या निवडा आणि काल काय बनवले होते ते सांगा; AI रिपीट न करता परिपूर्ण थाळी सुचवेल!',
+      'mealTime': 'जेवणाची वेळ',
+      'breakfastOpt': '🥐 सकाळचा नाश्ता',
+      'lunchOpt': '🍛 दुपारचे जेवण',
+      'dinnerOpt': '🍲 रात्रीचे जेवण',
+      'availableVeggies': 'घरात कोणत्या भाज्या उपलब्ध आहेत?',
+      'familyMembers': 'व्यक्तींची संख्या',
+      'cookingTime': 'स्वयंपाकासाठी उपलब्ध वेळ',
+      'cookedYesterday': 'काल जेवणात काय बनवलं होतं? (डिश रिपीट टाळण्यासाठी)',
+      'yesterdayHint': 'उदा. बटाटा भाजी, पनीर, मटकी उसळ, अंडी...',
+      'suggestMealBtn': 'आजचा परिपूर्ण मेनू सुचवा ✨',
+      'suggestingMeal': 'स्मार्ट AI मेनू शोधत आहे...',
+      'todaysRecommendation': 'आजचा सुचवलेला मेनू 🍽️',
+      'whyThisDish': 'ही भाजी का सुचवली? (AI विश्लेषण)',
+      'completeThali': 'परिपूर्ण थाळी कॉम्बिनेशन',
+      'suggestAnother': 'दुसरी भाजी सुचवा 🔄',
+      'startCookingThis': 'ही भाजी बनवायला घ्या 👨‍🍳',
+      'weeklyPlannerTab': 'आठवड्याचे नियोजन',
+      'dailySuggestionTab': 'दैनिक भाजी मेनू',
+      'weeklyPlannerTitle': '७ दिवसांचे स्मार्ट जेवण नियोजन 📅',
+      'weeklyPlannerSubtitle':
+          'घरच्या गृहिणींसाठी दररोजचे संतुलित व पोषणयुक्त जेवण वेळापत्रक',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'किचन रेसिपी AI जनरेटर',
@@ -119,8 +146,35 @@ class AppStrings {
 
       // Bottom Nav
       'home': 'होम',
+      'mealPlanner': 'क्या बनाएं?',
       'generator': 'रेसिपी AI',
       'saved': 'सेव की गई',
+
+      // Meal Suggestion & Planner
+      'mealSuggestionTitle': 'आज खाने में क्या बनाएं?',
+      'mealSuggestionSubtitle':
+          'घर में उपलब्ध सब्जियां चुनें और बताएं कल क्या बना था; AI बिना रिपीट किए परफेक्ट थाली सुझाएगा!',
+      'mealTime': 'भोजन का समय',
+      'breakfastOpt': '🥐 सुबह का नाश्ता',
+      'lunchOpt': '🍛 दोपहर का खाना',
+      'dinnerOpt': '🍲 रात का खाना',
+      'availableVeggies': 'घर में कौन सी सब्जियां हैं?',
+      'familyMembers': 'सदस्यों की संख्या',
+      'cookingTime': 'पकाने का समय',
+      'cookedYesterday': 'कल क्या बना था? (रिपीट से बचने के लिए)',
+      'yesterdayHint': 'उदा. आलू गोभी, पनीर, दाल मखनी...',
+      'suggestMealBtn': 'आज का परफेक्ट मेन्यू सुझाएं ✨',
+      'suggestingMeal': 'स्मार्ट AI सोच रहा है...',
+      'todaysRecommendation': 'आज का सुझाया गया मेन्यू 🍽️',
+      'whyThisDish': 'यह डिश क्यों सुझाई गई? (AI कारण)',
+      'completeThali': 'पूरी थाली कॉम्बिनेशन',
+      'suggestAnother': 'कोई और सब्जी सुझाएं 🔄',
+      'startCookingThis': 'यह सब्जी बनाना शुरू करें 👨‍🍳',
+      'weeklyPlannerTab': 'हफ़्ते का प्लान',
+      'dailySuggestionTab': 'दैनिक सब्जी सुझाव',
+      'weeklyPlannerTitle': '७ दिनों का स्मार्ट मील प्लान 📅',
+      'weeklyPlannerSubtitle':
+          'गृहणियों के लिए रोज़ का संतुलित और स्वादिष्ट आहार चार्ट',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'रसोई रेसिपी AI जनरेटर',
@@ -204,8 +258,35 @@ class AppStrings {
 
       // Bottom Nav
       'home': 'Home',
+      'mealPlanner': 'What to Cook?',
       'generator': 'Recipe AI',
       'saved': 'Saved',
+
+      // Meal Suggestion & Planner
+      'mealSuggestionTitle': 'What Vegetable to Cook Today?',
+      'mealSuggestionSubtitle':
+          'Select available veggies and what you made yesterday; AI will suggest the perfect balanced meal without repeats!',
+      'mealTime': 'Meal Timing',
+      'breakfastOpt': '🥐 Breakfast',
+      'lunchOpt': '🍛 Lunch',
+      'dinnerOpt': '🍲 Dinner',
+      'availableVeggies': 'Vegetables available at home',
+      'familyMembers': 'Number of People',
+      'cookingTime': 'Available Cooking Time',
+      'cookedYesterday': 'What was cooked yesterday? (To avoid repeating)',
+      'yesterdayHint': 'e.g. Potato Sabzi, Paneer, Matki, Dal Tadka...',
+      'suggestMealBtn': 'Suggest Today’s Perfect Meal ✨',
+      'suggestingMeal': 'Smart AI is deciding the menu...',
+      'todaysRecommendation': 'Today’s Recommendation 🍽️',
+      'whyThisDish': 'Why this dish? (AI Insights)',
+      'completeThali': 'Complete Meal & Thali Pairing',
+      'suggestAnother': 'Suggest Another Dish 🔄',
+      'startCookingThis': 'Start Cooking This Dish 👨‍🍳',
+      'weeklyPlannerTab': 'Weekly Planner',
+      'dailySuggestionTab': 'Daily Meal Suggestion',
+      'weeklyPlannerTitle': '7-Day Smart Meal Planner 📅',
+      'weeklyPlannerSubtitle':
+          'Effortless weekly balanced meal schedule designed for homemakers',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'Smart Kitchen AI Generator',
@@ -289,8 +370,35 @@ class AppStrings {
 
       // Bottom Nav
       'home': 'Inicio',
+      'mealPlanner': '¿Qué cocinar?',
       'generator': 'Receta AI',
       'saved': 'Guardadas',
+
+      // Meal Suggestion & Planner
+      'mealSuggestionTitle': '¿Qué verdura cocinar hoy?',
+      'mealSuggestionSubtitle':
+          'Selecciona las verduras disponibles y lo que cocinaste ayer; ¡la IA sugerirá un menú equilibrado!',
+      'mealTime': 'Momento de comida',
+      'breakfastOpt': '🥐 Desayuno',
+      'lunchOpt': '🍛 Almuerzo',
+      'dinnerOpt': '🍲 Cena',
+      'availableVeggies': 'Verduras disponibles en casa',
+      'familyMembers': 'Número de personas',
+      'cookingTime': 'Tiempo de cocción',
+      'cookedYesterday': '¿Qué cocinaste ayer? (Para no repetir)',
+      'yesterdayHint': 'ej. Patata, Queso Paneer, Lentejas...',
+      'suggestMealBtn': 'Sugerir Menú Perfecto ✨',
+      'suggestingMeal': 'La IA está pensando...',
+      'todaysRecommendation': 'Recomendación de Hoy 🍽️',
+      'whyThisDish': '¿Por qué este plato? (Motivo IA)',
+      'completeThali': 'Combinación Completa de Menú',
+      'suggestAnother': 'Sugerir Otra Verdura 🔄',
+      'startCookingThis': 'Empezar a Cocinar 👨‍🍳',
+      'weeklyPlannerTab': 'Plan Semanal',
+      'dailySuggestionTab': 'Sugerencia Diaria',
+      'weeklyPlannerTitle': 'Planificador Inteligente de 7 Días 📅',
+      'weeklyPlannerSubtitle':
+          'Calendario equilibrado de comidas diseñado para el hogar',
 
       // Pantry & Generator Screen
       'smartPantryTitle': 'Generador Inteligente AI',
