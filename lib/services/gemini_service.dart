@@ -22,16 +22,6 @@ class GeminiService {
     'gemini-2.0-flash-lite',
   ];
 
-  static const List<String> indianCulinaryThemes = [
-    'अस्सल महाराष्ट्रीयन फोडणी आणि गोडा मसाला स्पेशल (Traditional Maharashtrian)',
-    'झणझणीत कोल्हापुरी/मालवणी सुका मसाला (Kolhapuri / Malvani Tadka)',
-    'गावरान चवीचे गावरान पिठलं-उसळ (Rustic Village Style)',
-    'शाही मलाईदार ढाबा स्टाईल करी (North Indian Dhaba Style)',
-    'खमंग नाश्ता व झटपट तवा स्पेशल (Authentic Tawa & Breakfast)',
-    'साजूक तुपातील सुवासिक पुलाव व राईस (Fragrant Ghee Tempering)',
-    'उपवास व सात्विक खमंग डिश (Satvik / Fasting Delight)',
-  ];
-
   static Future<Recipe> generateRecipe({
     required List<String> ingredients,
     required List<String> preferences,
@@ -41,57 +31,63 @@ class GeminiService {
     final ingredientsList = ingredients.join(', ');
     final preferencesList =
         preferences.isNotEmpty ? preferences.join(', ') : 'None';
-    final randomTheme =
-        indianCulinaryThemes[Random().nextInt(indianCulinaryThemes.length)];
     final seed = DateTime.now().millisecondsSinceEpoch;
 
     String langInstruction =
-        'completely and authentically in MARATHI (मराठी) language. Use natural Marathi food terminology (उदा. पाककृतीचे नाव, साहित्याची नावे व अचूक प्रमाण, कृतीचे टप्पे, फोडणी, वाफ काढणे इत्यादी सर्व शुद्ध मराठीत असावेत).';
+        'completely and authentically in MARATHI (मराठी) language. Use natural Marathi food terminology (उदा. पाककृतीचे नाव, साहित्याची नावे व अचूक प्रमाण, कृतीचे टप्पे, फोडणी, वाफ काढणे, एकजीव करणे, शेंगदाण्याचा कूट इत्यादी सर्व शुद्ध मराठीत असावेत).';
     if (language == 'hi') {
       langInstruction =
-          'completely in HINDI (हिंदी) language. Use natural Hindi culinary terms (उदा. तड़का, भूनना, सामग्री और सही माप, चरण सब सरल और शुद्ध हिंदी में हों).';
+          'completely in HINDI (हिंदी) language. Use natural Hindi culinary terms (उदा. तड़का, धीमी आंच, भूनना, सामग्री और सही माप, चरण सब सरल और शुद्ध हिंदी में हों).';
     } else if (language == 'en') {
       langInstruction =
-          'in English, while maintaining authentic Indian and Maharashtrian culinary terms (e.g. Tadka/Phodani, Goda Masala, Kande Pohe, Usal, Bhakri, Ghee Tempering).';
+          'in English, using authentic culinary terminology (e.g., Phodani / Tadka, Goda Masala, Kande Pohe, Usal, Bhakri, Cover & Steam).';
     } else if (language == 'es') {
       langInstruction = 'completely in SPANISH (Español) language.';
     }
 
     final prompt = '''
-You are a renowned Master Chef specializing in authentic Indian, Maharashtrian, and regional gastronomy (महाराष्ट्रीयन व भारतीय पाककला तज्ज्ञ).
-Create a 100% CULINARILY ACCURATE, PRACTICAL, and DELICIOUS recipe based on these available kitchen ingredients:
-Available Ingredients: $ingredientsList
-Dietary Preferences / Restrictions: $preferencesList
-Culinary Style / Theme: $randomTheme
-Randomization Seed: $seed
+You are a renowned Master Chef and Food Historian specializing in authentic Indian and Maharashtrian cuisine (महाराष्ट्रीयन व भारतीय पाककला तज्ज्ञ).
+Your task is to craft a 100% CULINARILY ACCURATE, PRACTICAL, AND MOUTH-WATERING recipe tailored specifically to these kitchen ingredients:
 
-CRITICAL AUTHENTICITY & ACCURACY RULES:
+AVAILABLE INGREDIENTS: $ingredientsList
+DIETARY PREFERENCES / RESTRICTIONS: $preferencesList
+RANDOMIZATION SEED: $seed
+
+STRICT CULINARY ACCURACY & AUTHENTICITY RULES:
 1. OUTPUT LANGUAGE: Output the recipe $langInstruction.
-2. CULINARY ACCURACY: Follow real Indian cooking techniques:
-   - Proper Phodani / Tadka order: Hot oil/ghee -> Mustard seeds (मोहरी) crackle -> Cumin (जिरे) -> Hing (हिंग) -> Curry leaves (कढीपत्ता) -> Ginger-garlic-chillies -> Onions -> Turmeric/Spices.
-   - Traditional Indian seasonings: Use Goda Masala (गोडा मसाला), Kanda Lasun Masala, roasted peanut powder (शेंगदाण्याचा कूट), coconut (खोबरे), fresh coriander, lemon juice, or jaggery-tamarind appropriately.
-   - Realistic Cooking Times: Give realistic preparation and cooking durations.
-   - Exact measurements: Use realistic amounts (उदा. २ वाट्या, १ चमचा, १/२ कप, चवीनुसार मीठ).
+2. INGREDIENT HARMONY:
+   - Identify the primary hero ingredient (e.g. Pohe -> Kande Pohe/Batata Pohe, Besan -> Pithla/Zunka, Matki -> Usal/Misal, Rice -> Masale Bhaat/Pulao, Brinjal -> Bharli Vangi, Potato -> Batata Bhaji).
+   - Provide EXACT kitchen measurements (उदा. २ वाट्या, १ मोठा चमचा, २ चिमूट, १/२ कप, चवीनुसार).
+3. AUTHENTIC PHODANI (TEMPERING) TECHNIQUE:
+   - Always follow the golden tempering order: Heat oil/ghee -> Mustard seeds (मोहरी) crackle -> Cumin (जिरे) -> Hing (हिंग) -> Curry leaves (कढीपत्ता) -> Ginger-garlic-chillies -> Onions -> Turmeric/Spices.
+4. AUTHENTIC MAHARASHTRIAN / INDIAN FLAVOR PROFILE:
+   - Season with Goda Masala, Kanda-Lasun Masala, roasted peanut powder (शेंगदाण्याचा कूट), fresh/dry coconut, fresh coriander, lemon juice, or jaggery-tamarind as appropriate for the dish.
+5. STEP ACCURACY & REALISTIC TIMERS:
+   - Step 1: Prep & cuts (धुणे, कापणे, भिजवणे) with realistic timer (120-180s).
+   - Step 2: Khomang Phodani / Tadka (खमंग फोडणी) (90-120s).
+   - Step 3: Sautéing & spice incorporation (परतणे) (180-300s).
+   - Step 4: Steaming with lid / Simmering (वाफ काढणे / दम देणे) (300-600s).
+   - Step 5: Finishing garnish (कोथिंबीर, खोबरे, लिंबू रस) & Plating (60s).
 
 Return ONLY a valid JSON object matching this exact schema:
 {
-  "title": "Authentic Dish Title in target language (e.g. खमंग फोडणीचे बटाटे पोहे / झणझणीत मटकी उसळ)",
-  "category": "Cuisine Category (e.g. महाराष्ट्रीयन खास, खमंग नाश्ता, पारंपरिक जेवण, स्ट्रीट फूड, उपवास स्पेशल)",
+  "title": "Authentic Dish Title in target language",
+  "category": "Cuisine Category (महाराष्ट्रीयन खास, खमंग नाश्ता, पारंपरिक जेवण, स्ट्रीट फूड, उपवास स्पेशल)",
   "time": "Total cooking time (e.g. २० मिनिटे / 20 min)",
-  "calories": "Estimated calories (e.g. ३५० कॅलरी / 350 kcal)",
+  "calories": "Estimated realistic calories (e.g. ३४० कॅलरी / 340 kcal)",
   "servings": "Number of servings (e.g. ३ व्यक्तींसाठी / 3 Servings)",
-  "description": "2 appetizing sentences describing taste, aroma (खमंग सुवास), and texture in target language.",
+  "description": "2-3 appetizing sentences describing flavor, aroma (खमंग सुवास), and mouthfeel in target language.",
   "ingredients": [
     {
-      "name": "Ingredient item with preparation in target language",
-      "amount": "Exact culinary measurement (e.g. २ वाट्या, १ मोठा चमचा, २ चिमूट)"
+      "name": "Ingredient name with preparation cut in target language",
+      "amount": "Exact measurement (e.g. २ वाट्या, १ मोठा कांदा, २ चमचे)"
     }
   ],
   "steps": [
     {
       "number": 1,
-      "title": "Action title in target language (e.g. साहित्याची पूर्वतयारी / खमंग फोडणी)",
-      "instruction": "Clear, detailed step-by-step cooking instruction",
+      "title": "Action title in target language",
+      "instruction": "Detailed, highly accurate cooking instruction",
       "timerSeconds": 180
     }
   ]
@@ -118,7 +114,7 @@ Return ONLY a valid JSON object matching this exact schema:
                   ],
                   'generationConfig': {
                     'responseMimeType': 'application/json',
-                    'temperature': 0.95,
+                    'temperature': 0.9,
                     'topP': 0.95,
                   }
                 }),
@@ -136,15 +132,13 @@ Return ONLY a valid JSON object matching this exact schema:
             }
           }
         } catch (e) {
-          // Fall through to next model or offline engine
           continue;
         }
       }
     }
 
-    // Dynamic procedural Indian/Maharashtrian cooking synthesis
-    return _buildAuthenticIndianProceduralRecipe(
-        ingredients, preferences, language);
+    // Intelligent culinary engine matched to specific ingredients
+    return _buildIntelligentCulinaryRecipe(ingredients, preferences, language);
   }
 
   static Recipe _parseRecipeFromJson(
@@ -169,13 +163,13 @@ Return ONLY a valid JSON object matching this exact schema:
     final time =
         json['time'] as String? ?? (language == 'mr' ? '२५ मिनिटे' : '25 min');
     final calories = json['calories'] as String? ??
-        (language == 'mr' ? '३८० कॅलरी' : '380 kcal');
+        (language == 'mr' ? '३६० कॅलरी' : '360 kcal');
     final servings = json['servings'] as String? ??
         (language == 'mr' ? '३ व्यक्तींसाठी' : '3 Servings');
     final description = json['description'] as String? ??
         (language == 'mr'
-            ? 'किचनमधील उपलब्ध साहित्यापासून तयार केलेली एक अस्सल, खमंग व चवदार डिश.'
-            : 'An authentic and delicious dish crafted from your kitchen ingredients.');
+            ? 'आपल्या घरातील साहित्यापासून तयार केलेली एक अस्सल व खमंग महाराष्ट्रीयन डिश.'
+            : 'An authentic and delicious dish crafted with precision from your ingredients.');
 
     final rawIngredients = json['ingredients'] as List? ?? [];
     final parsedIngredients = rawIngredients.map((i) {
@@ -206,7 +200,7 @@ Return ONLY a valid JSON object matching this exact schema:
     final imageUrl = _getImageForIndianDish(category, title);
 
     return Recipe(
-      id: 'indian-recipe-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(9999)}',
+      id: 'accurate-recipe-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(9999)}',
       title: title,
       category: category,
       rating: (4.8 + Random().nextDouble() * 0.2).toStringAsFixed(1),
@@ -246,7 +240,7 @@ Return ONLY a valid JSON object matching this exact schema:
           title: 'खमंग फोडणी देणे',
           instruction:
               'कढईत तेल किंवा साजूक तूप गरम करून मोहरी, जिरे, हिंग, कढीपत्ता आणि हिरवी मिरची-लसूण खमंग परता.',
-          timerSeconds: 150,
+          timerSeconds: 120,
         ),
         CookingStep(
           number: 3,
@@ -267,30 +261,30 @@ Return ONLY a valid JSON object matching this exact schema:
     return [
       CookingStep(
         number: 1,
-        title: 'Ingredient Prep',
+        title: 'Ingredient Preparation',
         instruction:
-            'Wash and finely chop your fresh vegetables, aromatics, and chillies.',
+            'Wash, peel, and finely chop your fresh vegetables, chillies, and aromatics.',
         timerSeconds: 180,
       ),
       CookingStep(
         number: 2,
-        title: 'Authentic Tadka / Phodani',
+        title: 'Authentic Tempering (Phodani)',
         instruction:
-            'Heat oil/ghee in a kadhai. Add mustard seeds, cumin, hing, curry leaves, and green chillies until crackling and aromatic.',
-        timerSeconds: 150,
+            'Heat oil/ghee in a kadhai. Add mustard seeds, cumin, hing, curry leaves, and green chillies until aromatic.',
+        timerSeconds: 120,
       ),
       CookingStep(
         number: 3,
         title: 'Sauté & Steam (वाफ काढणे)',
         instruction:
-            'Add ingredients with turmeric, spice blend, and salt. Cover and steam over low heat until tender and deeply flavorful.',
+            'Add ingredients with spices and salt. Cover with lid and steam on low heat until tender.',
         timerSeconds: 300,
       ),
       CookingStep(
         number: 4,
         title: 'Garnish & Serve Hot',
         instruction:
-            'Garnish with freshly chopped coriander, fresh grated coconut, and a squeeze of lemon. Serve piping hot with Bhakri or Roti.',
+            'Garnish with freshly chopped coriander, coconut, and lemon juice. Serve piping hot.',
         timerSeconds: 60,
       ),
     ];
@@ -311,7 +305,7 @@ Return ONLY a valid JSON object matching this exact schema:
         lower.contains('पिठलं') ||
         lower.contains('झुणका') ||
         lower.contains('भाकरी') ||
-        lower.contains('थाल')) {
+        lower.contains('थाली')) {
       return 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=80';
     } else if (lower.contains('vangi') ||
         lower.contains('वांगी') ||
@@ -346,259 +340,494 @@ Return ONLY a valid JSON object matching this exact schema:
     return generalIndianImages[Random().nextInt(generalIndianImages.length)];
   }
 
-  /// Procedural generation for authentic Maharashtrian & Indian dishes
-  static Recipe _buildAuthenticIndianProceduralRecipe(
+  /// Intelligent ingredient-aware recipe synthesis engine
+  static Recipe _buildIntelligentCulinaryRecipe(
     List<String> ingredients,
     List<String> preferences,
     String language,
   ) {
     final rand = Random();
-    final primary = ingredients.isNotEmpty ? ingredients[0] : 'कांदा-बटाटा';
-    final secondary = ingredients.length > 1 ? ingredients[1] : 'शेंगदाणे';
-    final remaining = ingredients.skip(2).join(', ');
+    final allText = ingredients.join(' ').toLowerCase();
 
-    // 8 authentic Indian culinary styles
-    final styles = [
-      {
-        'mr_title': 'खमंग फोडणीचे $primary आणि $secondary फ्राय',
-        'mr_desc':
-            'मोहरी, जिरे, हिंग आणि कढीपत्त्याच्या खमंग फोडणीत परतून तयार केलेली चवदार भाजी.',
-        'mr_cat': 'महाराष्ट्रीयन खास',
-        'hi_title': 'स्वादिष्ट तड़का $primary और $secondary फ्राई',
-        'hi_desc':
-            'राई, जीरा और हींग के पारंपरिक तड़के में पकाई गई लाजवाब सब्ज़ी.',
-        'hi_cat': 'पारंपरिक भोजन',
-        'en_title': 'Tempered Maharashtrian $primary & $secondary Stir-Fry',
-        'en_desc':
-            'A fragrant sauté seasoned with crackling mustard seeds, cumin, hing, curry leaves, and fresh coconut.',
-        'en_cat': 'Maharashtrian Special',
-        'time_mr': '${15 + rand.nextInt(10)} मिनिटे',
-        'time_hi': '${15 + rand.nextInt(10)} मिनट',
-        'time_en': '${15 + rand.nextInt(10)} min',
-        'calories_mr': '${290 + rand.nextInt(90)} कॅलरी',
-        'calories_hi': '${290 + rand.nextInt(90)} कैलोरी',
-        'calories_en': '${290 + rand.nextInt(90)} kcal',
-        'steps_mr': [
-          CookingStep(
-              number: 1,
-              title: 'साहित्याची तयारी',
-              instruction:
-                  '$primary आणि $secondary स्वच्छ धुवून आवश्यक आकारात चिरून घ्या.',
-              timerSeconds: 120),
-          CookingStep(
-              number: 2,
-              title: 'अस्सल खमंग फोडणी',
-              instruction:
-                  'कढईत २ चमचे तेल गरम करून मोहरी, जिरे, हिंग, कढीपत्ता आणि हिरवी मिरची खमंग तडतडू द्या.',
-              timerSeconds: 90),
-          CookingStep(
-              number: 3,
-              title: 'मसाले व वाफ काढणे',
-              instruction:
-                  '$primary, $secondary ${remaining.isNotEmpty ? "आणि $remaining" : ""} घालून हळद, चवीनुसार मीठ टाका. झाकण ठेवून मंद आचेवर ५ मिनिटे वाफ काढा.',
-              timerSeconds: 300),
-          CookingStep(
-              number: 4,
-              title: 'कोथिंबीर व खोबरे सजावट',
-              instruction:
-                  'वरून भाजलेल्या शेंगदाण्याचा कूट, ताजी कोथिंबीर आणि ओले खोबरे टाकून गरम भाकरी/चपातीसोबत वाढा.',
-              timerSeconds: 60),
-        ],
-      },
-      {
-        'mr_title': 'झणझणीत गावरान $primary रस्सा उसळ',
-        'mr_desc':
-            'कांदा-लसूण मसाला, भाजलेले खोबरे आणि तरीदार रश्श्याची अस्सल गावरान उसळ.',
-        'mr_cat': 'पारंपरिक जेवण',
-        'hi_title': 'मसालेदार तरीदार $primary उसल करी',
-        'hi_desc':
-            'प्याज, लहसुन और भुने नारियल के मसालेदार रस्से में पकाई गई स्वादिष्ट उसल.',
-        'hi_cat': 'पारंपरिक भोजन',
-        'en_title': 'Zanzanit Maharashtrian $primary Usal Gravy',
-        'en_desc':
-            'A spicy, rich coconut-onion spiced curry with authentic Kolhapuri flavors.',
-        'en_cat': 'Traditional Meals',
-        'time_mr': '${20 + rand.nextInt(12)} मिनिटे',
-        'time_hi': '${20 + rand.nextInt(12)} मिनट',
-        'time_en': '${20 + rand.nextInt(12)} min',
-        'calories_mr': '${360 + rand.nextInt(100)} कॅलरी',
-        'calories_hi': '${360 + rand.nextInt(100)} कैलोरी',
-        'calories_en': '${360 + rand.nextInt(100)} kcal',
-        'steps_mr': [
-          CookingStep(
-              number: 1,
-              title: 'मसाला वाटण भाजणे',
-              instruction:
-                  'कांदा, लसूण, आले आणि सुके खोबरे थोडे तेल घालून खमंग भाजून मिक्सरमध्ये बारीक वाटा.',
-              timerSeconds: 240),
-          CookingStep(
-              number: 2,
-              title: 'तरी (कट) तयार करणे',
-              instruction:
-                  'कढईत ३ चमचे तेल गरम करून तयार वाटण तेल सुटेपर्यंत परता. कांदा-लसूण मसाला व लाल तिखट घाला.',
-              timerSeconds: 240),
-          CookingStep(
-              number: 3,
-              title: 'रस्सा शिजवणे',
-              instruction:
-                  '$primary आणि $secondary घालून १.५ कप गरम पाणी घाला. मंद आचेवर ८-१० मिनिटे उकळून छान तरी येऊ द्या.',
-              timerSeconds: 540),
-          CookingStep(
-              number: 4,
-              title: 'लिंबू व पावासोबत आस्वाद',
-              instruction:
-                  'बारीक चिरलेला कांदा, लिंबू आणि लादी पाव किंवा भाकरीसोबत गरमागरम सर्व्ह करा.',
-              timerSeconds: 60),
-        ],
-      },
-      {
-        'mr_title': 'खमंग कुरकुरीत $primary आणि $secondary थालीपीठ / वडी',
-        'mr_desc':
-            'भाजणीचे पीठ, बारीक कांदा, तीळ, ओवा आणि कोथिंबिरीची कुरकुरीत मेजवानी.',
-        'mr_cat': 'खमंग नाश्ता',
-        'hi_title': 'कुरकुरी स्वादिष्ट $primary टिक्की / थालीपीठ',
-        'hi_desc':
-            'तिल, अजवाइन और ताज़े मसालों के साथ तवे पर सेकी गई कुरकुरी डिश.',
-        'hi_cat': 'स्वादिष्ट नाश्ता',
-        'en_title': 'Crispy Multi-Grain $primary & $secondary Thalipeeth',
-        'en_desc':
-            'Savory spiced multigrain pancake infused with sesame seeds, carom seeds, and fresh aromatics.',
-        'en_cat': 'Breakfast & Snacks',
-        'time_mr': '${18 + rand.nextInt(8)} मिनिटे',
-        'time_hi': '${18 + rand.nextInt(8)} मिनट',
-        'time_en': '${18 + rand.nextInt(8)} min',
-        'calories_mr': '${310 + rand.nextInt(80)} कॅलरी',
-        'calories_hi': '${310 + rand.nextInt(80)} कैलोरी',
-        'calories_en': '${310 + rand.nextInt(80)} kcal',
-        'steps_mr': [
-          CookingStep(
-              number: 1,
-              title: 'पीठ मळणे',
-              instruction:
-                  '$primary, $secondary, बारीक कांदा, लसूण-मिरची, तीळ, ओवा, हळद व मीठ घालून मऊ पीठ मळून घ्या.',
-              timerSeconds: 200),
-          CookingStep(
-              number: 2,
-              title: 'थापणे',
-              instruction:
-                  'ओल्या सुती कापडावर तेलाचा हात लावून गोल थापा आणि मध्यभागी छिद्रे पाडा.',
-              timerSeconds: 150),
-          CookingStep(
-              number: 3,
-              title: 'तव्यावर भाजणे',
-              instruction:
-                  'गरम तव्यावर थोडे तेल सोडून दोन्ही बाजूंनी खरपूस व कुरकुरीत होईपर्यंत भाजा.',
-              timerSeconds: 360),
-          CookingStep(
-              number: 4,
-              title: 'लोणी व दह्यासोबत सर्व्ह करा',
-              instruction:
-                  'गरमागरम थालीपीठावर पांढरे लोणी किंवा दही ठेवून आस्वाद घ्या.',
-              timerSeconds: 60),
-        ],
-      },
-      {
-        'mr_title': 'साजूक तुपातील सुवासिक $primary मसाला पुलाव',
-        'mr_desc':
-            'खडा मसाला, साजूक तूप, ताजे साहित्य आणि सुवासिक तांदळाचा खमंग पुलाव.',
-        'mr_cat': 'पारंपरिक जेवण',
-        'hi_title': 'देसी घी वाला सुगन्धित $primary पुलाव',
-        'hi_desc': 'खड़े मसालों और शुद्ध घी में पका हुआ खुशबूदार पुलाव.',
-        'hi_cat': 'पारंपरिक भोजन',
-        'en_title': 'Fragrant Ghee Tempering $primary & $secondary Pulao',
-        'en_desc':
-            'Aromatic rice dish gently simmered with whole spices, pure ghee, and sautéed ingredients.',
-        'en_cat': 'Traditional Meals',
-        'time_mr': '${22 + rand.nextInt(10)} मिनिटे',
-        'time_hi': '${22 + rand.nextInt(10)} मिनट',
-        'time_en': '${22 + rand.nextInt(10)} min',
-        'calories_mr': '${380 + rand.nextInt(100)} कॅलरी',
-        'calories_hi': '${380 + rand.nextInt(100)} कैलोरी',
-        'calories_en': '${380 + rand.nextInt(100)} kcal',
-        'steps_mr': [
-          CookingStep(
-              number: 1,
-              title: 'तांदूळ व खडे मसाले फोडणी',
-              instruction:
-                  'कुकर किंवा पातेल्यात २ चमचे साजूक तूप गरम करून लवंग, दालचिनी, तमालपत्र आणि जिरे परता.',
-              timerSeconds: 120),
-          CookingStep(
-              number: 2,
-              title: 'साहित्य परतणे',
-              instruction:
-                  '$primary, $secondary आणि आले-लसूण पेस्ट घालून २ मिनिटे खमंग परता.',
-              timerSeconds: 180),
-          CookingStep(
-              number: 3,
-              title: 'दम देणे / शिजवणे',
-              instruction:
-                  'धुतलेला तांदूळ, गरम पाणी, मीठ व थोडा गोडा मसाला घालून मंद आचेवर शिजवून घ्या.',
-              timerSeconds: 480),
-          CookingStep(
-              number: 4,
-              title: 'गरमागरम वाढणे',
-              instruction:
-                  'वरून काजू आणि ताजी कोथिंबीर घालून रायत्यासोबत गरमागरम वाढा.',
-              timerSeconds: 60),
-        ],
-      },
-    ];
-
-    final chosen = styles[rand.nextInt(styles.length)];
-
-    String title = chosen['mr_title'] as String;
-    String desc = chosen['mr_desc'] as String;
-    String cat = chosen['mr_cat'] as String;
-    String time = chosen['time_mr'] as String;
-    String calories = chosen['calories_mr'] as String;
-
-    if (language == 'hi') {
-      title = chosen['hi_title'] as String;
-      desc = chosen['hi_desc'] as String;
-      cat = chosen['hi_cat'] as String;
-      time = chosen['time_hi'] as String;
-      calories = chosen['calories_hi'] as String;
-    } else if (language == 'en') {
-      title = chosen['en_title'] as String;
-      desc = chosen['en_desc'] as String;
-      cat = chosen['en_cat'] as String;
-      time = chosen['time_en'] as String;
-      calories = chosen['calories_en'] as String;
+    // 1. Poha (पोहे) detected
+    if (allText.contains('पोहे') || allText.contains('poha')) {
+      return _buildPohaRecipe(ingredients, language, rand);
     }
+    // 2. Besan (बेसन) detected
+    else if (allText.contains('बेसन') ||
+        allText.contains('besan') ||
+        allText.contains('gram flour')) {
+      return _buildBesanRecipe(ingredients, language, rand);
+    }
+    // 3. Matki / Moong / Sprouts (मटकी / मूग / उसळ) detected
+    else if (allText.contains('मटकी') ||
+        allText.contains('matki') ||
+        allText.contains('sprout') ||
+        allText.contains('मूग')) {
+      return _buildSproutsRecipe(ingredients, language, rand);
+    }
+    // 4. Rice (तांदूळ / भात) detected
+    else if (allText.contains('तांदूळ') ||
+        allText.contains('rice') ||
+        allText.contains('भात') ||
+        allText.contains('चावल')) {
+      return _buildRiceRecipe(ingredients, language, rand);
+    }
+    // 5. Brinjal (वांगी) detected
+    else if (allText.contains('वांगी') ||
+        allText.contains('vangi') ||
+        allText.contains('brinjal') ||
+        allText.contains('बैंगन')) {
+      return _buildBrinjalRecipe(ingredients, language, rand);
+    }
+    // 6. Paneer (पनीर) detected
+    else if (allText.contains('पनीर') || allText.contains('paneer')) {
+      return _buildPaneerRecipe(ingredients, language, rand);
+    }
+    // 7. General Indian / Maharashtrian Sauté
+    else {
+      return _buildGeneralMaharashtrianRecipe(ingredients, language, rand);
+    }
+  }
 
-    final parsedIngredients = ingredients.map((item) {
-      final amounts = language == 'mr'
-          ? [
-              '१ मोठी वाटी',
-              '२ चमचे',
-              '१०० ग्रॅम',
-              '१ कप बारीक चिरून',
-              '१/२ वाटी भाजून'
-            ]
-          : ['1 cup', '2 tbsp', '150g', '1 cup chopped', 'To taste'];
-      return IngredientItem(
-        name: item,
-        amount: amounts[rand.nextInt(amounts.length)],
-        isChecked: false,
-      );
-    }).toList();
+  // --- Authentic Specialized Recipe Synthesizers ---
 
-    final steps = (chosen['steps_mr'] as List<CookingStep>);
+  static Recipe _buildPohaRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    final title = lang == 'mr'
+        ? 'खमंग कांदा-बटाटा पोहे (Authentic Batata Pohe)'
+        : lang == 'hi'
+            ? 'स्वादिष्ट कांदा-आलू पोहा'
+            : 'Authentic Maharashtrian Kande-Batata Pohe';
+
+    final desc = lang == 'mr'
+        ? 'जाड पोहे, खमंग तळलेले शेंगदाणे, बटाटा, कांदा आणि हिरवी मिरचीच्या खमंग फोडणीत वाफवून तयार केलेला पारंपारिक नाश्ता.'
+        : 'Fluffy flattened rice tempered with mustard, cumin, green chillies, peanuts, and finished with fresh coconut & lemon.';
 
     return Recipe(
-      id: 'marathi-dynamic-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(9999)}',
+      id: 'poha-recipe-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
       title: title,
-      category: cat,
-      rating: (4.8 + rand.nextDouble() * 0.2).toStringAsFixed(1),
-      reviews: language == 'mr' ? 'AI शेफ निर्मित' : 'AI Chef Verified',
-      difficulty: language == 'mr' ? 'सोपे' : 'Easy',
-      time: time,
-      calories: calories,
-      servings: language == 'mr' ? '३ व्यक्तींसाठी' : '3 Servings',
-      imageUrl: _getImageForIndianDish(cat, title),
+      category: lang == 'mr' ? 'खमंग नाश्ता' : 'Breakfast & Snacks',
+      rating: '4.9',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'सोपे' : 'Easy',
+      time: '१५ मिनिटे',
+      calories: '२८० कॅलरी',
+      servings: '३ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=900&q=80',
       description: desc,
-      ingredients: parsedIngredients,
-      steps: steps,
+      ingredients: [
+        IngredientItem(
+            name: 'जाड पोहे (Thick Poha)', amount: '२ वाट्या (धुवून निथळलेले)'),
+        IngredientItem(name: 'कांदा (बारीक उभा चिरलेला)', amount: '२ मध्यम'),
+        IngredientItem(
+            name: 'बटाटा (लहान बारीक चौकोनी तुकडे)', amount: '१ मध्यम'),
+        IngredientItem(
+            name: 'शेंगदाणे', amount: '२ मोठे चमचे (कुरकुरीत तळलेले)'),
+        IngredientItem(
+            name: 'मोहरी, जिरे, हिंग व हळद', amount: 'प्रत्येकी १/२ चमचा'),
+        IngredientItem(
+            name: 'हिरवी मिरची व कढीपत्ता', amount: '३ मिरच्या + ८ पाने'),
+        IngredientItem(
+            name: 'ओले खोबरे, कोथिंबीर व लिंबू', amount: 'सजावटीसाठी'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'पोहे भिजवणे व पूर्वतयारी',
+            instruction:
+                'पोहे चाळणीत २ वेळा पाण्याने धुवून पाणी पूर्ण निथळू द्या. त्यावर चवीनुसार मीठ व थोडी साखर घालून हलक्या हाताने मोकळे करा.',
+            timerSeconds: 120),
+        CookingStep(
+            number: 2,
+            title: 'शेंगदाणे तळणे व फोडणी',
+            instruction:
+                'कढईत २ मोठे चमचे तेल गरम करून शेंगदाणे कुरकुरीत तळून बाजूला काढा. त्याच तेलात मोहरी, जिरे, हिंग, कढीपत्ता आणि बारीक चिरलेली मिरची परता.',
+            timerSeconds: 150),
+        CookingStep(
+            number: 3,
+            title: 'कांदा-बटाटा मऊ करणे',
+            instruction:
+                'बारीक चिरलेला बटाटा व कांदा तेलात घालून मंद आचेवर बटाटा शिजेपर्यंत ३-४ मिनिटे परता. हळद घालून एकजीव करा.',
+            timerSeconds: 240),
+        CookingStep(
+            number: 4,
+            title: 'पोहे एकत्र करून वाफ काढणे',
+            instruction:
+                'भिजवलेले पोहे व तळलेले शेंगदाणे कढईत घाला. सर्व हलक्या हाताने एकत्र करा. झाकण ठेवून मंद आचेवर २-३ मिनिटे छान वाफ काढा.',
+            timerSeconds: 180),
+        CookingStep(
+            number: 5,
+            title: 'सजावट व लिंबू पिळणे',
+            instruction:
+                'वरून भरपूर ताजी कोथिंबीर, ओले खोबरे आणि लिंबाचा रस पिळून गरमागरम चहासोबत वाढा.',
+            timerSeconds: 60),
+      ],
+    );
+  }
+
+  static Recipe _buildBesanRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    final title = lang == 'mr'
+        ? 'झणझणीत लसूण फोडणीचे पिठलं (Pithla & Bhakri Special)'
+        : lang == 'hi'
+            ? 'मसालेदार बेसन पिठला और भाकरी'
+            : 'Zanzanit Garlic Tempered Pithla (Maharashtrian Gram Flour Curry)';
+
+    final desc = lang == 'mr'
+        ? 'ठेचलेला लसूण आणि हिरवी मिरचीच्या खमंग फोडणीत तयार केलेले गरमागरम गावरान पिठलं.'
+        : 'A rustic Maharashtrian comfort dish made of roasted spiced gram flour, heavy garlic tempering, and fresh coriander.';
+
+    return Recipe(
+      id: 'besan-recipe-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
+      title: title,
+      category: lang == 'mr' ? 'पारंपरिक जेवण' : 'Traditional Meals',
+      rating: '4.9',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'सोपे' : 'Easy',
+      time: '२० मिनिटे',
+      calories: '३२० कॅलरी',
+      servings: '२ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=80',
+      description: desc,
+      ingredients: [
+        IngredientItem(name: 'बेसन (चना डाळ पीठ)', amount: '१ वाटी'),
+        IngredientItem(name: 'बारीक चिरलेला कांदा', amount: '१ मोठा'),
+        IngredientItem(
+            name: 'लसूण व हिरवी मिरची (ठेचून)', amount: '२ मोठे चमचे'),
+        IngredientItem(
+            name: 'मोहरी, जिरे, हिंग व हळद', amount: 'प्रत्येकी १/२ चमचा'),
+        IngredientItem(name: 'कढीपत्ता व ताजी कोथिंबीर', amount: 'भरपूर'),
+        IngredientItem(
+            name: 'पाणी व मीठ', amount: '२.५ वाट्या पाणी, चवीनुसार मीठ'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'बेसन पेस्ट तयार करणे',
+            instruction:
+                '१ वाटी बेसनामध्ये १.५ वाटी पाणी घालून गाठी न राहता गुळगुळीत पातळ पेस्ट तयार करा.',
+            timerSeconds: 120),
+        CookingStep(
+            number: 2,
+            title: 'लसूण-कांदा खमंग फोडणी',
+            instruction:
+                'कढईत २ चमचे तेल गरम करून मोहरी, जिरे, हिंग, कढीपत्ता आणि ठेचलेला लसूण-मिरची परता. कांदा घालून तांबूस होईपर्यंत भाजा. हळद व मीठ घाला.',
+            timerSeconds: 180),
+        CookingStep(
+            number: 3,
+            title: 'पिठलं शिजवणे व वाफ काढणे',
+            instruction:
+                'कढईत १ वाटी गरम पाणी घाला. उकळी आल्यावर बेसनाची पेस्ट हळूहळू घालत सतत ढवळा जेणेकरून गाठी होणार नाहीत. झाकण ठेवून मंद आचेवर ५ मिनिटे वाफ काढा.',
+            timerSeconds: 300),
+        CookingStep(
+            number: 4,
+            title: 'भाकरीसोबत वाढणे',
+            instruction:
+                'पिठल्यावर ताजी कोथिंबीर आणि वरून कच्च्या तेलाची धार सोडून गरमागरम ज्वारीची भाकरी, कांदा व ठेच्यासोबत वाढा.',
+            timerSeconds: 60),
+      ],
+    );
+  }
+
+  static Recipe _buildSproutsRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    final title = lang == 'mr'
+        ? 'झणझणीत मोड आलेल्या मटकीची उसळ (Sprouted Matki Usal)'
+        : lang == 'hi'
+            ? 'मसालेदार अंकुरित मटकी उसल'
+            : 'Zanzanit Sprouted Matki Usal (Maharashtrian Sprouts)';
+
+    return Recipe(
+      id: 'sprouts-recipe-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
+      title: title,
+      category: lang == 'mr' ? 'महाराष्ट्रीयन खास' : 'Maharashtrian Special',
+      rating: '4.9',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'सोपे' : 'Easy',
+      time: '२२ मिनिटे',
+      calories: '३१० कॅलरी',
+      servings: '३ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80',
+      description: lang == 'mr'
+          ? 'मोड आलेली मटकी, कांदा-टोमॅटो, गोडा मसाला आणि खमंग ओल्या खोबऱ्याची पौष्टिक व चवदार उसळ.'
+          : 'Nutrient-rich sprouted beans sautéed with authentic Goda masala, onions, grated coconut, and fresh coriander.',
+      ingredients: [
+        IngredientItem(
+            name: 'मोड आलेली मटकी (Sprouted Matki)', amount: '२ वाट्या'),
+        IngredientItem(name: 'कांदा व टोमॅटो बारीक चिरून', amount: '१-१ मध्यम'),
+        IngredientItem(name: 'आले-लसूण पेस्ट', amount: '१ चमचा'),
+        IngredientItem(
+            name: 'गोडा मसाला / कांदा-लसूण मसाला', amount: '१.५ मोठा चमचा'),
+        IngredientItem(name: 'हळद, लाल तिखट व मीठ', amount: 'चवीनुसार'),
+        IngredientItem(name: 'ओले खोबरे कीस व कोथिंबीर', amount: '२ चमचे'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'मटकी पूर्वतयारी',
+            instruction: 'मोड आलेली मटकी स्वच्छ धुवून पाणी निथळून घ्या.',
+            timerSeconds: 120),
+        CookingStep(
+            number: 2,
+            title: 'खमंग फोडणी व मसाला परतणे',
+            instruction:
+                'कढईत २ मोठे चमचे तेल गरम करून मोहरी, जिरे, हिंग, कढीपत्ता, कांदा आणि आले-लसूण पेस्ट तेल सुटेपर्यंत परता. टोमॅटो घालून मऊ करा.',
+            timerSeconds: 240),
+        CookingStep(
+            number: 3,
+            title: 'मटकी व वाफ काढणे',
+            instruction:
+                'मटकी, हळद, गोडा मसाला, तिखट व मीठ घाला. १/२ कप गरम पाणी घालून झाकण ठेवा व मंद आचेवर ७-८ मिनिटे वाफ काढा.',
+            timerSeconds: 480),
+        CookingStep(
+            number: 4,
+            title: 'सजावट व सर्व्ह करणे',
+            instruction:
+                'मटकी मऊ शिजल्यावर वरून ओले खोबरे आणि बारीक चिरलेली कोथिंबीर टाकून चपाती किंवा पावासोबत वाढा.',
+            timerSeconds: 60),
+      ],
+    );
+  }
+
+  static Recipe _buildRiceRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    final title = lang == 'mr'
+        ? 'साजूक तुपातील सुवासिक मसाले भात (Masale Bhaat)'
+        : lang == 'hi'
+            ? 'पारंपरिक मसाले भात (पुलाव)'
+            : 'Authentic Maharashtrian Masale Bhaat (Spiced Rice)';
+
+    return Recipe(
+      id: 'rice-recipe-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
+      title: title,
+      category: lang == 'mr' ? 'पारंपरिक जेवण' : 'Traditional Meals',
+      rating: '4.9',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'Medium' : 'Medium',
+      time: '२५ मिनिटे',
+      calories: '३९० कॅलरी',
+      servings: '३ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80',
+      description: lang == 'mr'
+          ? 'सुवासिक तांदूळ, खडे मसाले, गोडा मसाला, साजूक तूप आणि भाज्यांचा अस्सल पारंपरिक मसाले भात.'
+          : 'Fragrant Basmati rice cooked in pure ghee with whole spices, Goda masala, and sautéed vegetables.',
+      ingredients: [
+        IngredientItem(
+            name: 'सुवासिक तांदूळ (Basmati/आंबेमोहोर)',
+            amount: '१.५ वाटी (धुतलेला)'),
+        IngredientItem(
+            name: 'खडे मसाले (तमालपत्र, लवंग, दालचिनी)',
+            amount: 'प्रत्येकी २ नग'),
+        IngredientItem(name: 'साजूक तूप व तेल', amount: '२ मोठे चमचे'),
+        IngredientItem(
+            name: 'कांदा, हिरवी मिरची व आले-लसूण', amount: 'आवश्यकतेनुसार'),
+        IngredientItem(name: 'गोडा मसाला व हळद', amount: '१.५ चमचा गोडा मसाला'),
+        IngredientItem(name: 'काजू व ओले खोबरे', amount: 'सजावटीसाठी'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'तांदूळ भिजवणे व खडे मसाले फोडणी',
+            instruction:
+                'तांदूळ धुवून १५ मिनिटे ठेवा. कुकर किंवा पातेल्यात साजूक तूप गरम करून खडे मसाले व जिरे खमंग परता.',
+            timerSeconds: 150),
+        CookingStep(
+            number: 2,
+            title: 'साहित्य व मसाले परतणे',
+            instruction:
+                'कांदा, मिरची, आले-लसूण आणि उपलब्ध भाज्या घालून २ मिनिटे परता. हळद, गोडा मसाला व मीठ घाला.',
+            timerSeconds: 180),
+        CookingStep(
+            number: 3,
+            title: 'तांदूळ परतणे व पाणी घालणे',
+            instruction:
+                'भिजवलेला तांदूळ घालून १ मिनिट हलक्या हाताने परता. ३ वाट्या उकळते गरम पाणी घाला.',
+            timerSeconds: 180),
+        CookingStep(
+            number: 4,
+            title: 'दम देणे व सर्व्ह करणे',
+            instruction:
+                'झाकण ठेवून मंद आचेवर १० मिनिटे शिजवा (किंवा कुकरमध्ये २ शिट्ट्या घ्या). वर साजूक तूप, काजू आणि कोथिंबीर घालून वाढा.',
+            timerSeconds: 600),
+      ],
+    );
+  }
+
+  static Recipe _buildBrinjalRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    return Recipe(
+      id: 'brinjal-recipe-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
+      title: lang == 'mr'
+          ? 'मसालेदार भरली वांगी (Bharli Vangi Special)'
+          : 'Authentic Maharashtrian Stuffed Bharli Vangi',
+      category: lang == 'mr' ? 'महाराष्ट्रीयन खास' : 'Maharashtrian Special',
+      rating: '4.8',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'Medium' : 'Medium',
+      time: '३० मिनिटे',
+      calories: '३५० कॅलरी',
+      servings: '४ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=900&q=80',
+      description: lang == 'mr'
+          ? 'लहान काटेरी वांग्यात भाजलेले शेंगदाणे, खोबरे, तीळ आणि गोडा मसाल्याचे खमंग सारण भरून मंद आचेवर शिजवलेली खास भाजी.'
+          : 'Tender baby brinjals stuffed with a rich paste of roasted peanuts, sesame, dry coconut, and authentic Maharashtrian spices.',
+      ingredients: [
+        IngredientItem(
+            name: 'काटेरी लहान वांगी', amount: '६-८ नग (४ चिरा पाडलेली)'),
+        IngredientItem(name: 'भाजलेल्या शेंगदाण्याचा कूट', amount: '१/२ वाटी'),
+        IngredientItem(name: 'भाजलेले सुके खोबरे व तीळ', amount: '२-२ चमचे'),
+        IngredientItem(name: 'गोडा मसाला / कांदा-लसूण मसाला', amount: '२ चमचे'),
+        IngredientItem(name: 'आले-लसूण पेस्ट व गूळ-चिंच', amount: '१-१ चमचा'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'वांगी कापणे व पाण्यात ठेवणे',
+            instruction:
+                'वांग्याला देठाकडून ४ चिरा पाडून मिठाच्या पाण्यात ठेवा.',
+            timerSeconds: 150),
+        CookingStep(
+            number: 2,
+            title: 'सारण भरणे',
+            instruction:
+                'शेंगदाणा कूट, खोबरे, तीळ, गोडा मसाला, चिंच-गूळ आणि मीठ एकत्र करून वांग्यात चांगला दाबून भरा.',
+            timerSeconds: 240),
+        CookingStep(
+            number: 3,
+            title: 'वांगी परतणे व दम देणे',
+            instruction:
+                'कढईत ३ चमचे तेल गरम करून भरलेली वांगी तेलात सर्व बाजूंनी परता. उरलेला मसाला व १ वाटी गरम पाणी घालून मंद आचेवर झाकण ठेवून १२ मिनिटे शिजवा.',
+            timerSeconds: 720),
+        CookingStep(
+            number: 4,
+            title: 'भाकरीसोबत आस्वाद',
+            instruction:
+                'वांग्यातून तेल सुटल्यावर वरून कोथिंबीर टाकून गरमागरम ज्वारीची भाकरी किंवा चपातीसोबत वाढा.',
+            timerSeconds: 60),
+      ],
+    );
+  }
+
+  static Recipe _buildPaneerRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    return Recipe(
+      id: 'paneer-recipe-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
+      title: lang == 'mr'
+          ? 'खमंग पनीर भुर्जी / तवा पनीर मसाला'
+          : 'Spiced Indian Paneer Bhurji (Scrambled Cottage Cheese)',
+      category: lang == 'mr' ? 'झटपट स्पेशल' : 'Quick Meals',
+      rating: '4.9',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'सोपे' : 'Easy',
+      time: '१५ मिनिटे',
+      calories: '३४० कॅलरी',
+      servings: '२ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=900&q=80',
+      description: lang == 'mr'
+          ? 'ताजे पनीर, बारीक चिरलेला कांदा-टोमॅटो, हिरवी मिरची आणि बटरच्या खमंग फोडणीत तयार केलेली चवदार डिश.'
+          : 'Fresh crumbled cottage cheese sautéed with finely diced onions, tomatoes, green chillies, and aromatic Indian spices.',
+      ingredients: [
+        IngredientItem(name: 'ताजे पनीर (Crumbled)', amount: '२०० ग्रॅम'),
+        IngredientItem(name: 'कांदा व टोमॅटो', amount: '१-१ मोठा बारीक चिरून'),
+        IngredientItem(name: 'हिरवी मिरची व आले-लसूण', amount: '२ चमचे'),
+        IngredientItem(name: 'बटर व तेल', amount: '२ मोठे चमचे'),
+        IngredientItem(
+            name: 'कसुरी मेथी, हळद, गरम मसाला व मीठ', amount: 'चवीनुसार'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'तयारी',
+            instruction:
+                'पनीर हाताने मऊ कुस्करून घ्या. कांदा, टोमॅटो आणि मिरची बारीक चिरा.',
+            timerSeconds: 120),
+        CookingStep(
+            number: 2,
+            title: 'खमंग फोडणी',
+            instruction:
+                'पॅनमध्ये बटर व तेल गरम करून जिरे, हिरवी मिरची आणि कांदा हलका गुलाबी होईपर्यंत परता. टोमॅटो घालून तेल सुटेपर्यंत भाजा.',
+            timerSeconds: 240),
+        CookingStep(
+            number: 3,
+            title: 'पनीर एकत्र करणे',
+            instruction:
+                'हळद, गरम मसाला, मीठ आणि कुस्करलेले पनीर घालून मध्यम आचेवर २-३ मिनिटे एकजीव करा (पनीर जास्त वेळ शिजवू नका).',
+            timerSeconds: 180),
+        CookingStep(
+            number: 4,
+            title: 'कसुरी मेथी व सर्व्हिंग',
+            instruction:
+                'वरून हातावर चोळलेली कसुरी मेथी व भरपूर ताजी कोथिंबीर टाकून गरम पाव किंवा पराठ्यासोबत वाढा.',
+            timerSeconds: 60),
+      ],
+    );
+  }
+
+  static Recipe _buildGeneralMaharashtrianRecipe(
+      List<String> ingredients, String lang, Random rand) {
+    final primary = ingredients.isNotEmpty ? ingredients[0] : 'कांदा-बटाटा';
+    final secondary = ingredients.length > 1 ? ingredients[1] : 'शेंगदाणे';
+
+    return Recipe(
+      id: 'general-marathi-${DateTime.now().millisecondsSinceEpoch}-${rand.nextInt(999)}',
+      title: lang == 'mr'
+          ? 'खमंग फोडणीचे $primary आणि $secondary फ्राय'
+          : 'Authentic Maharashtrian Tempered $primary & $secondary',
+      category: lang == 'mr' ? 'महाराष्ट्रीयन खास' : 'Maharashtrian Special',
+      rating: '4.8',
+      reviews: lang == 'mr' ? 'AI शेफ प्रमाणित' : 'AI Chef Verified',
+      difficulty: lang == 'mr' ? 'सोपे' : 'Easy',
+      time: '१६ मिनिटे',
+      calories: '२९० कॅलरी',
+      servings: '३ व्यक्तींसाठी',
+      imageUrl:
+          'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=80',
+      description: lang == 'mr'
+          ? 'मोहरी, जिरे, हिंग आणि कढीपत्त्याच्या खमंग फोडणीत परतून तयार केलेली चवदार भाजी.'
+          : 'A delicately tempered stir-fry infused with mustard, cumin, hing, curry leaves, roasted peanut powder, and fresh coconut.',
+      ingredients: [
+        IngredientItem(name: primary, amount: '२ वाट्या (बारीक चिरून)'),
+        IngredientItem(name: secondary, amount: '१ वाटी'),
+        IngredientItem(
+            name: 'मोहरी, जिरे, हिंग व हळद', amount: 'प्रत्येकी १/२ चमचा'),
+        IngredientItem(
+            name: 'कढीपत्ता व हिरवी मिरची', amount: '८ पाने + २ मिरच्या'),
+        IngredientItem(
+            name: 'भाजलेल्या शेंगदाण्याचा कूट व खोबरे', amount: '२ मोठे चमचे'),
+      ],
+      steps: [
+        CookingStep(
+            number: 1,
+            title: 'साहित्याची तयारी',
+            instruction:
+                '$primary आणि $secondary स्वच्छ धुवून बारीक चिरून घ्या.',
+            timerSeconds: 120),
+        CookingStep(
+            number: 2,
+            title: 'अस्सल खमंग फोडणी',
+            instruction:
+                'कढईत २ चमचे तेल गरम करून मोहरी, जिरे, हिंग, कढीपत्ता आणि हिरवी मिरची खमंग तडतडू द्या.',
+            timerSeconds: 90),
+        CookingStep(
+            number: 3,
+            title: 'वाफ काढणे',
+            instruction:
+                '$primary आणि $secondary घालून हळद व मीठ टाका. झाकण ठेवून मंद आचेवर ५ मिनिटे छान वाफ काढा.',
+            timerSeconds: 300),
+        CookingStep(
+            number: 4,
+            title: 'सजावट',
+            instruction:
+                'वरून भाजलेल्या शेंगदाण्याचा कूट, ओले खोबरे आणि ताजी कोथिंबीर टाकून गरमागरम वाढा.',
+            timerSeconds: 60),
+      ],
     );
   }
 }
